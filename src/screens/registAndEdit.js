@@ -8,18 +8,33 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import * as token from "../styles/designToken";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 export default function RegistAndEdit() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.page}>기프티콘 등록하기</Text>
       <Image style={styles.gifticon} source={require("../assets/gift.png")} />
-      <TextInput style={styles.edit} placeholder="사용처"></TextInput>
+      {/* <TextInput style={styles.edit} placeholder="사용처"></TextInput>
       <TextInput style={styles.edit} placeholder="상품명"></TextInput>
-      <TextInput style={styles.edit} placeholder="기프티콘 코드"></TextInput>
+      <TextInput style={styles.edit} placeholder="기프티콘 코드"></TextInput> */}
+
+      <View style={styles.inputContainer}>
+        <TextInput style={styles.edit} placeholder="사용처" />
+        <Icon name="edit" size={24} color="#000" style={styles.icon} />
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput style={styles.edit} placeholder="상품명" />
+        <Icon name="edit" size={24} color="#000" style={styles.icon} />
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput style={styles.edit} placeholder="기프티콘 코드" />
+        <Icon name="edit" size={24} color="#000" style={styles.icon} />
+      </View>
 
       <TouchableOpacity style={styles.registContainer}>
-        <Text style={styles.registText}>등록하기</Text>
+        <Text style={styles.registText}>등록</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -28,7 +43,7 @@ export default function RegistAndEdit() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     // paddingLeft: "6%",
   },
   page: {
@@ -41,18 +56,50 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     marginBottom: 36,
   },
-  edit: {
+
+  inputContainer: {
     width: "88%",
     height: 48,
-    alignSelf: "center",
-    marginTop: 8,
-    marginBottom: 8,
-    marginLeft: "6%",
-    marginRight: "6%",
-    padding: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
     borderRadius: 15,
-    backgroundColor: "lightgray",
+    marginVertical: 8,
+    marginHorizontal: "6%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  edit: {
+    // width: "88%",
+    // height: 48,
+    // alignSelf: "center",
+    // marginTop: 8,
+    // marginBottom: 8,
+    // marginLeft: "6%",
+    // marginRight: "6%",
+    // padding: 14,
+    // borderRadius: 15,
+    // backgroundColor: "white",
+    // fontSize: 18,
+    // // 그림자
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 0,
+    // },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 5, // Android에서는 elevation으로 그림자 효과를 적용
+    flex: 1,
     fontSize: 18,
+    padding: 14,
   },
   registContainer: {
     width: "88%",
@@ -62,9 +109,14 @@ const styles = StyleSheet.create({
     justifyContent: "center", // 내부 텍스트 수평 중앙 정렬
     marginTop: 52,
     marginBottom: 60,
-    backgroundColor: "lightgray",
+    backgroundColor: token.color.main,
+    borderRadius: 15,
   },
   registText: {
     fontSize: 18,
+    color: "white",
+  },
+  icon: {
+    marginRight: 14,
   },
 });

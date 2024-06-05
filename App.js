@@ -13,7 +13,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main">
         <Stack.Screen name="Main" component={Main} />
-        <Stack.Screen name="RegistAndEdit" component={RegistAndEdit} />
+        <Stack.Screen name="RegistAndEdit" component={RegistAndEdit} options={{ title: "" }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
