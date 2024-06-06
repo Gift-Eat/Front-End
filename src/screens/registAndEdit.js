@@ -44,10 +44,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    // paddingLeft: "6%",
   },
   page: {
-    margin: "6%",
+    // margin: "6%",
+    marginTop: "2%",
+    marginBottom: "6%",
+    marginLeft: "6%",
     fontSize: 22,
     fontWeight: "bold",
   },
@@ -77,26 +79,28 @@ const styles = StyleSheet.create({
   },
 
   edit: {
-    // width: "88%",
-    // height: 48,
-    // alignSelf: "center",
-    // marginTop: 8,
-    // marginBottom: 8,
-    // marginLeft: "6%",
-    // marginRight: "6%",
-    // padding: 14,
-    // borderRadius: 15,
-    // backgroundColor: "white",
-    // fontSize: 18,
-    // // 그림자
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 0,
-    // },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 4,
-    // elevation: 5, // Android에서는 elevation으로 그림자 효과를 적용
+    /*
+    width: "88%",
+    height: 48,
+    alignSelf: "center",
+    marginTop: 8,
+    marginBottom: 8,
+    marginLeft: "6%",
+    marginRight: "6%",
+    padding: 14,
+    borderRadius: 15,
+    backgroundColor: "white",
+    fontSize: 18,
+    // 그림자
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5, // Android에서는 elevation으로 그림자 효과를 적용
+    */
     flex: 1,
     fontSize: 18,
     padding: 14,
