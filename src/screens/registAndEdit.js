@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -11,14 +12,22 @@ import {
 import * as token from "../styles/designToken";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-export default function RegistAndEdit() {
+export default function RegistAndEdit({ route }) {
+  const { page } = route.params;
+  const [pageName, setPageName] = useState("");
+
+  useEffect(() => {
+    if (page === "regist") {
+      setPageName("등록");
+    } else if (page === "edit") {
+      setPageName("수정");
+    }
+  }, [page]);
+
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.page}>기프티콘 등록하기</Text>
+      <Text style={styles.page}>기프티콘 {pageName}하기</Text>
       <Image style={styles.gifticon} source={require("../assets/gift.png")} />
-      {/* <TextInput style={styles.edit} placeholder="사용처"></TextInput>
-      <TextInput style={styles.edit} placeholder="상품명"></TextInput>
-      <TextInput style={styles.edit} placeholder="기프티콘 코드"></TextInput> */}
 
       <View style={styles.inputContainer}>
         <TextInput style={styles.edit} placeholder="사용처" />
@@ -34,7 +43,7 @@ export default function RegistAndEdit() {
       </View>
 
       <TouchableOpacity style={styles.registContainer}>
-        <Text style={styles.registText}>등록</Text>
+        <Text style={styles.registText}>{pageName}</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -46,7 +55,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   page: {
-    // margin: "6%",
     marginTop: "2%",
     marginBottom: "6%",
     marginLeft: "6%",
@@ -68,6 +76,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginVertical: 8,
     marginHorizontal: "6%",
+
+    // 그림자
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -79,28 +89,6 @@ const styles = StyleSheet.create({
   },
 
   edit: {
-    /*
-    width: "88%",
-    height: 48,
-    alignSelf: "center",
-    marginTop: 8,
-    marginBottom: 8,
-    marginLeft: "6%",
-    marginRight: "6%",
-    padding: 14,
-    borderRadius: 15,
-    backgroundColor: "white",
-    fontSize: 18,
-    // 그림자
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5, // Android에서는 elevation으로 그림자 효과를 적용
-    */
     flex: 1,
     fontSize: 18,
     padding: 14,
