@@ -12,21 +12,10 @@ import {
 import * as token from "../styles/designToken";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-export default function RegistAndEdit({ route }) {
-  const { page } = route.params;
-  const [pageName, setPageName] = useState("");
-
-  useEffect(() => {
-    if (page === "regist") {
-      setPageName("등록");
-    } else if (page === "edit") {
-      setPageName("수정");
-    }
-  }, [page]);
-
+export default function Regist() {
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.page}>기프티콘 {pageName}하기</Text>
+      <Text style={styles.page}>기프티콘 등록하기</Text>
       <Image style={styles.gifticon} source={require("../assets/gift.png")} />
 
       <View style={styles.inputContainer}>
@@ -43,7 +32,7 @@ export default function RegistAndEdit({ route }) {
       </View>
 
       <TouchableOpacity style={styles.registContainer}>
-        <Text style={styles.registText}>{pageName}</Text>
+        <Text style={styles.registText}>등록</Text>
       </TouchableOpacity>
     </ScrollView>
   );
