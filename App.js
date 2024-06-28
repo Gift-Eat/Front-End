@@ -15,7 +15,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Main">
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen
-          name="edit"
+          name="Edit"
           component={Edit}
           // 상단바 네비게이션 설정
           options={({ navigation }) => ({
@@ -37,7 +37,7 @@ export default function App() {
           })}
         />
         <Stack.Screen
-          name="regist"
+          name="Regist"
           component={Regist}
           // 상단바 네비게이션 설정
           options={({ navigation }) => ({

@@ -11,12 +11,76 @@ import {
 } from "react-native";
 import * as token from "../styles/designToken";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import * as ImageManipulator from "expo-image-manipulator";
+import * as ImagePicker from "expo-image-picker";
+import { Dimensions } from "react-native";
 
-export default function Regist() {
+const screenWidth = Dimensions.get("window").width; // 화면 너비
+const imageWidth = screenWidth * 0.8;
+
+export default function Regist({ route }) {
+  const { image } = route.params || {};
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [originalImage, setOriginalImage] = useState(image);
+
+  useEffect(() => {
+    const cropImage = async () => {
+      try {
+        console.log("Original image URI: ", originalImage);
+        if (!originalImage) {
+          console.log("No image found");
+          return;
+        }
+
+        // 원본 이미지의 크기를 가져옴
+        const imageInfo = await ImageManipulator.manipulateAsync(originalImage, [], {
+          compress: 1,
+          format: ImageManipulator.SaveFormat.PNG,
+        });
+        const { width } = imageInfo;
+
+        const manipResult = await ImageManipulator.manipulateAsync(
+          originalImage,
+          [{ crop: { originX: 0, originY: 0, width: width, height: width } }],
+          { compress: 1, format: ImageManipulator.SaveFormat.PNG }
+        );
+        console.log("Cropped image URI: ", manipResult.uri);
+        setCroppedImage(manipResult.uri);
+      } catch (error) {
+        console.log("Image cropping failed: ", error);
+      }
+    };
+
+    cropImage();
+  }, [originalImage]);
+
+  const handleImagePress = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      if (!result.canceled && result.assets.length > 0) {
+        setOriginalImage(result.assets[0].uri);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Image selection failed: " + error.message);
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.page}>기프티콘 등록하기</Text>
-      <Image style={styles.gifticon} source={require("../assets/gift.png")} />
+
+      <TouchableOpacity onPress={handleImagePress} style={styles.imageContainer}>
+        {croppedImage ? (
+          <Image source={{ uri: croppedImage }} style={styles.gifticonImage} />
+        ) : (
+          <Text style={styles.loadingText}>이미지 로딩 중...</Text>
+        )}
+      </TouchableOpacity>
 
       <View style={styles.inputContainer}>
         <TextInput style={styles.edit} placeholder="사용처" />
@@ -45,15 +109,27 @@ const styles = StyleSheet.create({
   },
   page: {
     marginTop: "2%",
-    marginBottom: "6%",
+    marginBottom: "2%",
     marginLeft: "6%",
     fontSize: 22,
     fontWeight: "bold",
   },
-  gifticon: {
+
+  imageContainer: {
+    marginTop: "8%",
+    marginBottom: "10%",
+    alignItems: "center",
     alignSelf: "center",
-    paddingLeft: 0,
-    marginBottom: 36,
+  },
+  gifticonImage: {
+    width: imageWidth,
+    height: imageWidth,
+  },
+  loadingText: {
+    // width: imageWidth,
+    // height: imageWidth,
+    textAlign: "center",
+    textAlignVertical: "center",
   },
 
   inputContainer: {
@@ -79,7 +155,7 @@ const styles = StyleSheet.create({
 
   edit: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 16,
     padding: 14,
   },
   registContainer: {
