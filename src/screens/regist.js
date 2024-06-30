@@ -44,7 +44,7 @@ export default function Regist({ route }) {
           [{ crop: { originX: 0, originY: 0, width: width, height: width } }],
           { compress: 1, format: ImageManipulator.SaveFormat.PNG }
         );
-        console.log("Cropped image URI: ", manipResult.uri);
+        // console.log("Cropped image URI: ", manipResult.uri);
         setCroppedImage(manipResult.uri);
       } catch (error) {
         console.log("Image cropping failed: ", error);
