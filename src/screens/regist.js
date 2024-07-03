@@ -8,12 +8,14 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import * as token from "../styles/designToken";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { Dimensions } from "react-native";
+import axios from "axios";
 
 const screenWidth = Dimensions.get("window").width; // 화면 너비
 const imageWidth = screenWidth * 0.8;
@@ -22,6 +24,12 @@ export default function Regist({ route }) {
   const { image } = route.params || {};
   const [croppedImage, setCroppedImage] = useState(null);
   const [originalImage, setOriginalImage] = useState(image);
+  const [store, setStore] = useState("");
+  const [name, setName] = useState("");
+  const [expiry, setExpiry] = useState("");
+  // const [id, setId] = useState("");
+  const [code, setCode] = useState("");
+  const [registrationTime, setRegistrationTime] = useState("");
 
   useEffect(() => {
     const cropImage = async () => {
@@ -70,6 +78,34 @@ export default function Regist({ route }) {
     }
   };
 
+  const handleSubmit = async () => {
+    if (!store || !name || !code || !expiry) {
+      Alert.alert("Error", "모든 칸을 입력해주세요.");
+      return;
+    }
+
+    const data = {
+      id: 1,
+      name,
+      store,
+      code: parseInt(code),
+      expiry: parseInt(expiry),
+    };
+
+    try {
+      const response = await axios.post("http://localhost:8080", data);
+
+      if (response.status === 200) {
+        Alert.alert("Success", "데이터가 성공적으로 전송되었습니다");
+      } else {
+        Alert.alert("Error", "서버에 데이터를 전송하는 데 실패했습니다");
+      }
+    } catch (error) {
+      Alert.alert("Error", "네트워크 요청 중 오류가 발생했습니다");
+      console.log(error);
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.page}>기프티콘 등록하기</Text>
@@ -83,19 +119,34 @@ export default function Regist({ route }) {
       </TouchableOpacity>
 
       <View style={styles.inputContainer}>
-        <TextInput style={styles.edit} placeholder="사용처" />
+        <TextInput style={styles.edit} placeholder="사용처" value={store} onChangeText={setStore} />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.edit} placeholder="상품명" />
+        <TextInput style={styles.edit} placeholder="상품명" value={name} onChangeText={setName} />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.edit} placeholder="기프티콘 코드" />
+        <TextInput
+          style={styles.edit}
+          placeholder="기프티콘 코드 (1111222233334444)"
+          onChangeText={setCode}
+          keyboardType="numeric"
+        />
+        <Icon name="edit" size={24} color="#000" style={styles.icon} />
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.edit}
+          placeholder="유효기간 (20240511)"
+          value={expiry}
+          onChangeText={setExpiry}
+          keyboardType="numeric"
+        />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
 
-      <TouchableOpacity style={styles.registContainer}>
+      <TouchableOpacity style={styles.registContainer} onPress={handleSubmit}>
         <Text style={styles.registText}>등록</Text>
       </TouchableOpacity>
     </ScrollView>
