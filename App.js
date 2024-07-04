@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import MainScreen from './src/main.js'; // main.js 파일에서 기본 내보내기된 컴포넌트 가져오기
 
 const Stack = createStackNavigator();
-
+//마스터에서 변경한 거 푸시해보기
 function App() {
   return (
     <NavigationContainer>
