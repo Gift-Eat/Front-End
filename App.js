@@ -13,7 +13,14 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main">
-        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          // 상단바 네비게이션 설정
+          options={{
+            headerShown: false, // 상단 네비게이션 바 숨기기
+          }}
+        />
         <Stack.Screen
           name="Edit"
           component={Edit}
