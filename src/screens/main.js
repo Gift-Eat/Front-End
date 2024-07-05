@@ -8,6 +8,7 @@ import {
   Image,
   TouchableHighlight,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import Gifty from "../components/gifty";
 
@@ -16,10 +17,30 @@ const items = [
   { id: 2, image: require("../assets/gif2.png"), pdName: "sef", sName: "df", dd: 33 },
 ];
 
-export default function Main() {
+export default function Main({ navigation }) {
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 1,
+    });
+    // console.log("Image Picker Result: ", result);
+
+    if (result.assets && result.assets.length > 0 && !result.canceled) {
+      const imageUri = result.assets[0].uri;
+      // console.log("Selected image URI: ", imageUri);
+      navigation.navigate("Regist", { image: imageUri });
+    }
+  };
+
   return (
     <View style={styles.bigcont}>
-      <TouchableHighlight activeOpacity={0.6} underlayColor="#1c7a33" style={styles.regist}>
+      <TouchableHighlight
+        onPress={pickImage}
+        activeOpacity={0.6}
+        underlayColor="#1c7a33"
+        style={styles.regist}
+      >
         <Image source={require("../assets/regist.png")} style={{ width: 66, height: 66 }} />
       </TouchableHighlight>
       <View style={styles.container2}>
@@ -32,7 +53,11 @@ export default function Main() {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.row}>
             {items.map((gifticon) => (
-              <Gifty key={gifticon.id} {...gifticon} />
+              <Gifty
+                key={gifticon.id}
+                {...gifticon}
+                onPress={() => navigation.navigate("EditAndDetail")}
+              />
             ))}
           </View>
         </ScrollView>
@@ -65,6 +90,7 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontSize: 30,
+    color: "white",
   },
   ss: {
     flexDirection: "row",

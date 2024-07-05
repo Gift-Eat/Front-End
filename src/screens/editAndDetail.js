@@ -12,22 +12,22 @@ import {
 import * as token from "../styles/designToken";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-export default function Edit() {
+export default function EditAndDetail() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.page}>기프티콘 수정하기</Text>
       <Image style={styles.gifticon} source={require("../assets/gift.png")} />
 
       <View style={styles.inputContainer}>
-        <TextInput style={styles.edit} placeholder="사용처" />
+        <TextInput style={styles.edit} placeholder="사용처" value="미스터피자" />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.edit} placeholder="상품명" />
+        <TextInput style={styles.edit} placeholder="상품명" value="미스터트리오L" />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.edit} placeholder="기프티콘 코드" />
+        <TextInput style={styles.edit} placeholder="기프티콘 코드" value="921125315632" />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
 

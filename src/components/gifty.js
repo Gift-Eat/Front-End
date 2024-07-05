@@ -1,14 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-const Gifty = ({ image, pdName, sName, dd }) => {
+const Gifty = ({ image, pdName, sName, dd, onPress }) => {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity onPress={onPress} style={styles.card}>
       <Image source={image} style={styles.image} />
       <Text style={styles.store}>{sName}</Text>
       <Text style={styles.name}>{pdName}</Text>
       <Text style={styles.expiry}>D-{dd}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 1, height: 2 },
-    shadowOpacity: 0.8,
+    shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 1,
     margin: 5,
