@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Main from "./src/screens/main";
 import Regist from "./src/screens/regist";
-import Edit from "./src/screens/edit";
+import EditAndDetail from "./src/screens/editAndDetail";
 
 const Stack = createStackNavigator();
 
@@ -22,8 +22,8 @@ export default function App() {
           }}
         />
         <Stack.Screen
-          name="Edit"
-          component={Edit}
+          name="EditAndDetail"
+          component={EditAndDetail}
           // 상단바 네비게이션 설정
           options={({ navigation }) => ({
             title: "",
