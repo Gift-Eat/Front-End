@@ -1,144 +1,80 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Main from "./src/screens/main";
+import Regist from "./src/screens/regist";
+import EditAndDetail from "./src/screens/editAndDetail";
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.bigcont}>
-      <View style={styles.container2}>
-        <View style={styles.ss}>
-          <Text style={styles.appName}>
-            기프트잇
-          </Text>
-          <Text style={styles.setting}>
-            icon
-          </Text>
-        </View>
-      </View>
-      <View style={styles.container}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.obj}>
-              <Text style={styles.obj_t}>Press Here</Text>
-              <Text style={styles.obj_t}>스타벅스</Text>
-              <Text style={styles.obj_t}>아메리카노 T</Text>
-              <Text style={styles.obj_t}>D-185</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.obj}>
-              <Text style={styles.obj_t}>Press Here</Text>
-              <Text style={styles.obj_t}>스타벅스</Text>
-              <Text style={styles.obj_t}>아메리카노 T</Text>
-              <Text style={styles.obj_t}>D-185</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.obj}>
-              <Text style={styles.obj_t}>Press Here</Text>
-              <Text style={styles.obj_t}>스타벅스</Text>
-              <Text style={styles.obj_t}>아메리카노 T</Text>
-              <Text style={styles.obj_t}>D-185</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.obj}>
-              <Text style={styles.obj_t}>Press Here</Text>
-              <Text style={styles.obj_t}>스타벅스</Text>
-              <Text style={styles.obj_t}>아메리카노 T</Text>
-              <Text style={styles.obj_t}>D-185</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.obj}>
-              <Text style={styles.obj_t}>Press Here</Text>
-              <Text style={styles.obj_t}>스타벅스</Text>
-              <Text style={styles.obj_t}>아메리카노 T</Text>
-              <Text style={styles.obj_t}>D-185</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.obj}>
-              <Text style={styles.obj_t}>Press Here</Text>
-              <Text style={styles.obj_t}>스타벅스</Text>
-              <Text style={styles.obj_t}>아메리카노 T</Text>
-              <Text style={styles.obj_t}>D-185</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.obj}>
-              <Text style={styles.obj_t}>Press Here</Text>
-              <Text style={styles.obj_t}>스타벅스</Text>
-              <Text style={styles.obj_t}>아메리카노 T</Text>
-              <Text style={styles.obj_t}>D-185</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.obj}>
-              <Text style={styles.obj_t}>Press Here</Text>
-              <Text style={styles.obj_t}>스타벅스</Text>
-              <Text style={styles.obj_t}>아메리카노 T</Text>
-              <Text style={styles.obj_t}>D-185</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.obj}>
-              <Text style={styles.obj_t}>Press Here</Text>
-              <Text style={styles.obj_t}>스타벅스</Text>
-              <Text style={styles.obj_t}>아메리카노 T</Text>
-              <Text style={styles.obj_t}>D-185</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.obj}>
-              <Text style={styles.obj_t}>Press Here</Text>
-              <Text style={styles.obj_t}>스타벅스</Text>
-              <Text style={styles.obj_t}>아메리카노 T</Text>
-              <Text style={styles.obj_t}>D-185</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-        <StatusBar style="auto" />
-      </View>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Main">
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          // 상단바 네비게이션 설정
+          options={{
+            headerShown: false, // 상단 네비게이션 바 숨기기
+          }}
+        />
+        <Stack.Screen
+          name="EditAndDetail"
+          component={EditAndDetail}
+          // 상단바 네비게이션 설정
+          options={({ navigation }) => ({
+            title: "",
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.navigate("Main")}>
+                <Image
+                  source={require("./src/assets/nav_arrow.png")}
+                  style={{ width: 24, height: 24, marginLeft: 15 }}
+                />
+              </TouchableOpacity>
+            ),
+            headerStyle: {
+              backgroundColor: "white",
+              elevation: 0, // Android에서 그림자 제거
+              shadowOpacity: 0, // iOS에서 그림자 제거
+              borderBottomWidth: 0, // 하단 보더 제거
+            },
+          })}
+        />
+        <Stack.Screen
+          name="Regist"
+          component={Regist}
+          // 상단바 네비게이션 설정
+          options={({ navigation }) => ({
+            title: "",
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.navigate("Main")}>
+                <Image
+                  source={require("./src/assets/nav_arrow.png")}
+                  style={{ width: 24, height: 24, marginLeft: 15 }}
+                />
+              </TouchableOpacity>
+            ),
+            headerStyle: {
+              backgroundColor: "white",
+              elevation: 0, // Android에서 그림자 제거
+              shadowOpacity: 0, // iOS에서 그림자 제거
+              borderBottomWidth: 0, // 하단 보더 제거
+            },
+          })}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 5,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-  },
-  bigcont: {
     flex: 1,
-    backgroundColor: '#28A745',
-  },
-  container2: {
-    backgroundColor: '#28A745',
-    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
     justifyContent: "center",
-    marginTop: 12,
-    marginBottom: -30,
-    marginLeft: 30,
   },
-  appName: {
-    fontSize: 30,
-  },
-  ss: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  setting: {
-    marginRight: 20,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    padding: 10,
-  },
-  obj: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 30,
-  },
-  obj_t: {
-    fontSize: 18,
-  }
 });
