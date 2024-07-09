@@ -30,6 +30,7 @@ export default function Regist({ route }) {
   // const [id, setId] = useState("");
   const [code, setCode] = useState("");
   const [registrationTime, setRegistrationTime] = useState("");
+
   const [dayLeft, setDayLeft] = useState(null);
 
   const handleExpiryChange = (text) => {
@@ -67,7 +68,7 @@ export default function Regist({ route }) {
 
     cropImage();
   }, [originalImage]);
-
+  
   useEffect(() => {
     const calculateDayLeft = () => {
       if (expiry.length === 8) {
@@ -89,7 +90,6 @@ export default function Regist({ route }) {
     calculateDayLeft();
   }, [expiry]);
 
-
   const handleImagePress = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -108,6 +108,7 @@ export default function Regist({ route }) {
 
   const handleSubmit = async () => {
     console.log({dayLeft})
+
     if (!store || !name || !code || !expiry) {
       Alert.alert("Error", "모든 칸을 입력해주세요.");
       return;
