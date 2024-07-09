@@ -10,11 +10,12 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
-import Gifty from "../components/gifty";
+import Gifty from "../components/gifty.js";
 
 const items = [
   { id: 1, image: require("../assets/gif2.png"), pdName: "sef", sName: "df", dd: 33 },
-  { id: 2, image: require("../assets/gif2.png"), pdName: "sef", sName: "df", dd: 33 },
+  { id: 2, image: require("../assets/gif2.png"), pdName: "22", sName: "44", dd: 33 },
+
 ];
 
 export default function Main({ navigation }) {

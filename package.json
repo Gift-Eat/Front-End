@@ -17,6 +17,7 @@
     "expo-image-manipulator": "~12.0.5",
     "expo-image-picker": "~15.0.6",
     "expo-status-bar": "~1.12.1",
+    "expo-updates": "^0.25.18",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "^0.74.2",
