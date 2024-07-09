@@ -30,6 +30,12 @@ export default function Regist({ route }) {
   // const [id, setId] = useState("");
   const [code, setCode] = useState("");
   const [registrationTime, setRegistrationTime] = useState("");
+  const [dayLeft, setDayLeft] = useState(null);
+
+  const handleExpiryChange = (text) => {
+    const exText = text.replace(/[^0-9]/g, '');
+    setExpiry(exText);
+  };
 
   useEffect(() => {
     const cropImage = async () => {
@@ -62,6 +68,28 @@ export default function Regist({ route }) {
     cropImage();
   }, [originalImage]);
 
+  useEffect(() => {
+    const calculateDayLeft = () => {
+      if (expiry.length === 8) {
+        const today = new Date();
+        const expiryDate = new Date(
+          parseInt(expiry.substring(0, 4)),
+          parseInt(expiry.substring(4, 6)) - 1, // 월은 0부터 시작
+          parseInt(expiry.substring(6, 8))
+        );
+
+        const timeDiff = expiryDate.getTime() - today.getTime();
+        const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)); // 일 단위로 변환
+        setDayLeft(daysDiff);
+      } else {
+        setDayLeft(null); // 유효하지 않은 날짜 형식일 경우
+      }
+    };
+
+    calculateDayLeft();
+  }, [expiry]);
+
+
   const handleImagePress = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -79,6 +107,7 @@ export default function Regist({ route }) {
   };
 
   const handleSubmit = async () => {
+    console.log({dayLeft})
     if (!store || !name || !code || !expiry) {
       Alert.alert("Error", "모든 칸을 입력해주세요.");
       return;
@@ -143,7 +172,7 @@ export default function Regist({ route }) {
           style={styles.edit}
           placeholder="유효기간 (20240511)"
           value={expiry}
-          onChangeText={setExpiry}
+          onChangeText={handleExpiryChange}
           keyboardType="numeric"
         />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
