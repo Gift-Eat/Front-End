@@ -34,7 +34,7 @@ export default function Regist({ route }) {
   const [dayLeft, setDayLeft] = useState(null);
 
   const handleExpiryChange = (text) => {
-    const exText = text.replace(/[^0-9]/g, '');
+    const exText = text.replace(/[^0-9]/g, "");
     setExpiry(exText);
   };
 
@@ -62,13 +62,13 @@ export default function Regist({ route }) {
         console.log("Cropped image URI: ", manipResult.uri);
         setCroppedImage(manipResult.uri);
       } catch (error) {
-        console.log("Image cropping failed: ", error);
+        console.log("이미지 자르기 실패: ", error);
       }
     };
 
     cropImage();
   }, [originalImage]);
-  
+
   useEffect(() => {
     const calculateDayLeft = () => {
       if (expiry.length === 8) {
@@ -107,7 +107,7 @@ export default function Regist({ route }) {
   };
 
   const handleSubmit = async () => {
-    console.log({dayLeft})
+    console.log({ dayLeft });
 
     if (!store || !name || !code || !expiry) {
       Alert.alert("Error", "모든 칸을 입력해주세요.");
@@ -115,15 +115,15 @@ export default function Regist({ route }) {
     }
 
     const data = {
-      id: 1,
-      name,
-      store,
-      code: parseInt(code),
-      expiry: parseInt(expiry),
+      gifticon_name: name,
+      where_to_use: store,
+      serial_code: code,
+      expiration_date: parseInt(expiry),
     };
+    console.log("data", data);
 
     try {
-      const response = await axios.post("http://221.149.106.79:8080/api/be/create", data);
+      const response = await axios.post("http://172.16.108.130:8080/api/be/createpro", data);
       console.log(response.status);
 
       if (response.status === 200) {
@@ -162,7 +162,7 @@ export default function Regist({ route }) {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.edit}
-          placeholder="기프티콘 코드 (1111222233334444)"
+          placeholder="기프티콘 코드 (ㅇㅇ자리)"
           onChangeText={setCode}
           keyboardType="numeric"
         />
@@ -171,7 +171,7 @@ export default function Regist({ route }) {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.edit}
-          placeholder="유효기간 (20240511)"
+          placeholder="유효기간 (8자리)"
           value={expiry}
           onChangeText={handleExpiryChange}
           keyboardType="numeric"
