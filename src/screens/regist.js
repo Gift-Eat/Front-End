@@ -116,15 +116,15 @@ export default function Regist({ route }) {
 
     const data = {
       id: 1,
-      name,
-      store,
-      code: parseInt(code),
-      expiry: parseInt(expiry),
+      gifticon_name : name,
+      where_to_use : store,
+      serial_code :  parseInt(code),
+      expiration_date: parseInt(expiry)
     };
 
     try {
-      const response = await axios.post("http://221.149.106.79:8080/api/be/create", data);
-      console.log(response.status);
+      const response = await axios.post("http://172.16.108.130:8080/api/be/createpro",data);
+      console.log(response.data);
 
       if (response.status === 200) {
         Alert.alert("Success", "데이터가 성공적으로 전송되었습니다");
