@@ -82,9 +82,7 @@ export default function Regist({ route }) {
         const timeDiff = expiryDate.getTime() - today.getTime();
         const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)); // 일 단위로 변환
         setDayLeft(daysDiff);
-      } else {
-        setDayLeft(null); // 유효하지 않은 날짜 형식일 경우
-      }
+      }  
     };
 
     calculateDayLeft();
@@ -108,6 +106,13 @@ export default function Regist({ route }) {
 
   const handleSubmit = async () => {
     console.log({dayLeft})
+    if (daysDiff < 0) {
+      Alert.alert("잘못된 형식입니다");
+      return;}
+    if (expiry.length !== 8 ){
+      Alert.alert("생년월일은 8자리를 입력해주세요.")
+      return ;
+    }
 
     if (!store || !name || !code || !expiry) {
       Alert.alert("Error", "모든 칸을 입력해주세요.");
@@ -121,14 +126,15 @@ export default function Regist({ route }) {
       expiration_date: parseInt(expiry)
     };
     console.log('Sending data:', data);
-    console.log(response.data);
+    // console.log(response.data);
     try {
       const response = await axios.post("http://172.16.108.130:8080/api/be/createpro",data);
-      console.log(response.data);
+      
 
       if (response.status === 200) {
         Alert.alert("Success", "데이터가 성공적으로 전송되었습니다");
         console.log("성공");
+        // navigation.navigate('Main');  이거 되는지 안되는지 백이랑 서버 연결해봐야 함
       } else {
         Alert.alert("Error", "서버에 데이터를 전송하는 데 실패했습니다");
         console.log("실패");
