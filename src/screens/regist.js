@@ -115,13 +115,13 @@ export default function Regist({ route }) {
     }
 
     const data = {
-      id: 1,
       gifticon_name : name,
       where_to_use : store,
       serial_code :  parseInt(code),
       expiration_date: parseInt(expiry)
     };
-
+    console.log('Sending data:', data);
+    console.log(response.data);
     try {
       const response = await axios.post("http://172.16.108.130:8080/api/be/createpro",data);
       console.log(response.data);
