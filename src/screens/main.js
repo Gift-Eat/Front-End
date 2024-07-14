@@ -15,7 +15,6 @@ import Gifty from "../components/gifty.js";
 const items = [
   { id: 1, image: require("../assets/gif2.png"), pdName: "sef", sName: "df", dd: 33 },
   { id: 2, image: require("../assets/gif2.png"), pdName: "22", sName: "44", dd: 33 },
-
 ];
 
 export default function Main({ navigation }) {
