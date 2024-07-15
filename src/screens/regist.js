@@ -22,13 +22,17 @@ const imageWidth = screenWidth * 0.8;
 
 export default function Regist({ route }) {
   const { image } = route.params || {};
+  const { giftyconInfo } = route.params || {};
+
+
+  console.log(giftyconInfo.code)
   const [croppedImage, setCroppedImage] = useState(null);
   const [originalImage, setOriginalImage] = useState(image);
-  const [store, setStore] = useState("");
-  const [name, setName] = useState("");
-  const [expiry, setExpiry] = useState("");
+  const [store, setStore] = useState(giftyconInfo.store);
+  const [name, setName] = useState(giftyconInfo.name);
+  const [expiry, setExpiry] = useState(giftyconInfo.expirationDate);
   // const [id, setId] = useState("");
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(giftyconInfo.code);
   const [registrationTime, setRegistrationTime] = useState("");
 
   const [dayLeft, setDayLeft] = useState(null);
@@ -59,7 +63,7 @@ export default function Regist({ route }) {
           [{ crop: { originX: 0, originY: 0, width: width, height: width } }],
           { compress: 1, format: ImageManipulator.SaveFormat.PNG }
         );
-        console.log("Cropped image URI: ", manipResult.uri);
+        // console.log("Cropped image URI: ", manipResult.uri);
         setCroppedImage(manipResult.uri);
       } catch (error) {
         console.log("이미지 자르기 실패: ", error);
@@ -163,6 +167,7 @@ export default function Regist({ route }) {
         <TextInput
           style={styles.edit}
           placeholder="기프티콘 코드 (ㅇㅇ자리)"
+          value={code}
           onChangeText={setCode}
           keyboardType="numeric"
         />

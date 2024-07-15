@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   ScrollView,
   Image,
   TouchableHighlight,
@@ -11,10 +10,12 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import Gifty from "../components/gifty.js";
+import { checkOcr } from "../ocr/checkOcr.js";
 
 const items = [
   { id: 1, image: require("../assets/gif2.png"), pdName: "sef", sName: "df", dd: 33 },
   { id: 2, image: require("../assets/gif2.png"), pdName: "22", sName: "44", dd: 33 },
+
 ];
 
 export default function Main({ navigation }) {
@@ -29,7 +30,8 @@ export default function Main({ navigation }) {
     if (result.assets && result.assets.length > 0 && !result.canceled) {
       const imageUri = result.assets[0].uri;
       // console.log("Selected image URI: ", imageUri);
-      navigation.navigate("Regist", { image: imageUri });
+      const giftyconInfo = await checkOcr(imageUri)
+      navigation.navigate("Regist", { image: imageUri, giftyconInfo:giftyconInfo });
     }
   };
 
