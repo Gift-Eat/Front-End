@@ -1,46 +1,59 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  TouchableHighlight,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, TouchableHighlight } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Gifty from "../components/gifty.js";
 
-const items = [
-  { id: 1, image: require("../assets/gif2.png"), pdName: "sef", sName: "df", dd: 33 },
-  { id: 2, image: require("../assets/gif2.png"), pdName: "22", sName: "44", dd: 33 },
-];
-
 export default function Main({ navigation }) {
+  const [gifticonImg, setGifticonImg] = useState("");
+  const [store, setStore] = useState("");
+  const [name, setName] = useState("");
+  const [code, setCode] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [gifticons, setGifticons] = useState([]);
+
+  // 서버에서 데이터 가져오기
+  const getInfo = async () => {
+    try {
+      const response = await axios.get("http://52.78.201.166:8080/api/be/list");
+      const info = response.data;
+      console.log(info);
+
+      setGifticons(info);
+    } catch (error) {
+      console.error("데이터 가져오기 실패:", error);
+    }
+  };
+
+  useEffect(() => {
+    getInfo();
+  }, []);
+
+  // gifticons 상태가 변경될 때마다 호출됩니다.
+  useEffect(() => {
+    console.log("gifticons(저장된 기프티콘):", gifticons);
+  }, [gifticons]);
+
+  // 이미지 선택
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
       quality: 1,
     });
-    // console.log("Image Picker Result: ", result);
+    // console.log("Image Picker 결과: ", result);
 
     if (result.assets && result.assets.length > 0 && !result.canceled) {
       const imageUri = result.assets[0].uri;
-      // console.log("Selected image URI: ", imageUri);
+      // console.log("선택된 이미지 uri: ", imageUri);
       navigation.navigate("Regist", { image: imageUri });
     }
   };
 
   return (
     <View style={styles.bigcont}>
-      <TouchableHighlight
-        onPress={pickImage}
-        activeOpacity={0.6}
-        underlayColor="#1c7a33"
-        style={styles.regist}
-      >
+      <TouchableHighlight onPress={pickImage} activeOpacity={0.6} underlayColor="#1c7a33" style={styles.regist}>
         <Image source={require("../assets/regist.png")} style={{ width: 66, height: 66 }} />
       </TouchableHighlight>
       <View style={styles.container2}>
@@ -52,11 +65,11 @@ export default function Main({ navigation }) {
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.row}>
-            {items.map((gifticon) => (
+            {gifticons.map((gifticon) => (
               <Gifty
-                key={gifticon.id}
+                key={gifticon.gifticon_id}
                 {...gifticon}
-                onPress={() => navigation.navigate("EditAndDetail")}
+                onPress={() => navigation.navigate("EditAndDetail", { gifticon })}
               />
             ))}
           </View>
