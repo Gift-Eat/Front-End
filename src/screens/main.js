@@ -30,10 +30,10 @@ export default function Main({ navigation }) {
     getInfo();
   }, []);
 
-  // gifticons 상태가 변경될 때마다 호출됩니다.
-  useEffect(() => {
-    console.log("gifticons(저장된 기프티콘):", gifticons);
-  }, [gifticons]);
+  // gifticons 상태가 변경될 때마다 호출
+  // useEffect(() => {
+  //   console.log("gifticons(저장된 기프티콘):", gifticons);
+  // }, [gifticons]);
 
   // 이미지 선택
   const pickImage = async () => {
