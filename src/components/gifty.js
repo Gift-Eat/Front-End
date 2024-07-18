@@ -1,13 +1,29 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-const Gifty = ({ image, pdName, sName, dd, onPress }) => {
+const Gifty = ({
+  gifticon_id,
+  expiration_date,
+  gifticon_name,
+  where_to_use,
+  serial_code,
+  original_image_path,
+  onPress,
+}) => {
+  console.log("원본 이미지 경로:", original_image_path);
+
+  // original_image_path가 존재하지 않으면 기본 이미지 rul 사용
+  const imgUrl = original_image_path
+    ? `http://52.78.201.166:8080/images/${original_image_path.split("/").pop()}`
+    : "https://via.placeholder.com/150";
+  console.log("경로", imgUrl);
+
   return (
     <TouchableOpacity onPress={onPress} style={styles.card}>
-      <Image source={image} style={styles.image} />
-      <Text style={styles.store}>{sName}</Text>
-      <Text style={styles.name}>{pdName}</Text>
-      <Text style={styles.expiry}>D-{dd}</Text>
+      <Image source={{ uri: imgUrl }} style={styles.image} />
+      <Text style={styles.store}>{where_to_use}</Text>
+      <Text style={styles.name}>{gifticon_name}</Text>
+      <Text style={styles.expiry}>D-{expiration_date}</Text>
     </TouchableOpacity>
   );
 };
