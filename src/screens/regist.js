@@ -1,15 +1,6 @@
 import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { StyleSheet, Text, View, Image, TextInput, ScrollView, TouchableOpacity, Alert } from "react-native";
 import * as token from "../styles/designToken";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as ImageManipulator from "expo-image-manipulator";
@@ -110,7 +101,7 @@ export default function Regist({ route }) {
     console.log({ dayLeft });
 
     if (!store || !name || !code || !expiry) {
-      Alert.alert("Error", "모든 칸을 입력해주세요.");
+      Alert.alert("오류", "모든 칸을 입력해주세요.");
       return;
     }
 
@@ -123,7 +114,7 @@ export default function Regist({ route }) {
     console.log("data", data);
 
     try {
-      const response = await axios.post("http://172.16.108.130:8080/api/be/createpro", data);
+      const response = await axios.post("http://52.78.201.166:8080/api/be/createpro", data);
       console.log(response.status);
 
       if (response.status === 200) {
