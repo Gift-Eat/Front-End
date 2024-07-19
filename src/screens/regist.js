@@ -29,8 +29,6 @@ export default function Regist({ route }) {
   const [expiry, setExpiry] = useState("");
   // const [id, setId] = useState("");
   const [code, setCode] = useState("");
-  const [registrationTime, setRegistrationTime] = useState("");
-
   const [dayLeft, setDayLeft] = useState(null);
 
   const handleExpiryChange = (text) => {
@@ -106,7 +104,7 @@ export default function Regist({ route }) {
 
   const handleSubmit = async () => {
     console.log({dayLeft})
-    if (daysDiff < 0) {
+    if (dayLeft < 0) {
       Alert.alert("잘못된 형식입니다");
       return;}
     if (expiry.length !== 8 ){
@@ -124,11 +122,13 @@ export default function Regist({ route }) {
       where_to_use : store,
       serial_code :  parseInt(code),
       expiration_date: parseInt(expiry)
+      // day_left: dayLeft,
+      
     };
     console.log('Sending data:', data);
-    // console.log(response.data);
     try {
       const response = await axios.post("http://172.16.108.130:8080/api/be/createpro",data);
+      console.log(response.data);
       
 
       if (response.status === 200) {
@@ -148,7 +148,6 @@ export default function Regist({ route }) {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.page}>기프티콘 등록하기</Text>
-
       <TouchableOpacity onPress={handleImagePress} style={styles.imageContainer}>
         {croppedImage ? (
           <Image source={{ uri: croppedImage }} style={styles.gifticonImage} />

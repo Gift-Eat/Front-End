@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-const Gifty = ({ image, pdName, sName, dd, onPress }) => {
+const Gifty = ({ image, gifticon_name, store, serial_code,where_to_use,expiration_date,dayLeft, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.card}>
       <Image source={image} style={styles.image} />
-      <Text style={styles.store}>{sName}</Text>
-      <Text style={styles.name}>{pdName}</Text>
+      <Text style={styles.store}>{gifticon_name}</Text>
+      <Text style={styles.name}>{store}</Text>
       <Text style={styles.expiry}>D-{dd}</Text>
     </TouchableOpacity>
   );

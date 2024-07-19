@@ -11,30 +11,43 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import Gifty from "../components/gifty.js";
-import axios from 'axios'
-
-// const items = [ await axios.get("http://172.16.108.130:8080/api/be/createpro",data) ];
-const countResponse = await axios.get('http://172.16.108.130:8080/api/be/datacount');
-const dataCount = countResponse.data.count;
-const dataResponse = await axios.get('http://172.16.108.130:8080/api/be/createpro', {
-  params: {
-    count: dataCount
-  }
-});
-const items = dataResponse.data;
+import axios from 'axios';
 
 export default function Main({ navigation }) {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 첫 번째 단계: 데이터 개수 가져오기
+        const countResponse = await axios.get('http://172.16.108.130:8080/api/be/datacount');
+        const dataCount = countResponse.data.count;
+
+        // 두 번째 단계: 데이터를 가져오기
+        const dataResponse = await axios.get('http://172.16.108.130:8080/api/be/createpro', {
+          params: {
+            count: dataCount
+          }
+        });
+
+        setItems(dataResponse.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
       quality: 1,
     });
-    // console.log("Image Picker Result: ", result);
 
     if (result.assets && result.assets.length > 0 && !result.canceled) {
       const imageUri = result.assets[0].uri;
-      // console.log("Selected image URI: ", imageUri);
       navigation.navigate("Regist", { image: imageUri });
     }
   };
@@ -61,8 +74,11 @@ export default function Main({ navigation }) {
             {items.map((gifticon) => (
               <Gifty
                 key={gifticon.id}
-                {...gifticon}
-                onPress={() => navigation.navigate("EditAndDetail")}
+                image={{ uri: gifticon.image }}
+                gifticonName={gifticon.gifticon_name}
+                store={gifticon.store}
+                expiry={gifticon.expiry}
+                onPress={() => navigation.navigate("EditAndDetail", { itemId: gifticon.id })}
               />
             ))}
           </View>
@@ -127,3 +143,4 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
 });
+
