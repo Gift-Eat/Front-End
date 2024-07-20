@@ -3,7 +3,9 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, TouchableH
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Gifty from "../components/gifty.js";
+import Gifty from "../../components/gifty.js";
+import { checkOcr } from "./ocr/checkOcr.js";
+
 
 export default function Main({ navigation }) {
   const [gifticonImg, setGifticonImg] = useState("");
@@ -47,14 +49,15 @@ export default function Main({ navigation }) {
     if (result.assets && result.assets.length > 0 && !result.canceled) {
       const imageUri = result.assets[0].uri;
       // console.log("선택된 이미지 uri: ", imageUri);
-      navigation.navigate("Regist", { image: imageUri });
+      const giftyconInfo = await checkOcr(imageUri)
+      navigation.navigate("Regist", { image: imageUri, giftyconInfo:giftyconInfo });
     }
   };
 
   return (
     <View style={styles.bigcont}>
       <TouchableHighlight onPress={pickImage} activeOpacity={0.6} underlayColor="#1c7a33" style={styles.regist}>
-        <Image source={require("../assets/regist.png")} style={{ width: 66, height: 66 }} />
+        <Image source={require("../../assets/regist.png")} style={{ width: 66, height: 66 }} />
       </TouchableHighlight>
       <View style={styles.container2}>
         <View style={styles.ss}>

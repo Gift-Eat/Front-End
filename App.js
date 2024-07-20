@@ -3,7 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Main from "./src/screens/main";
+import Main from "./src/screens/main/main";
 import Regist from "./src/screens/regist";
 import EditAndDetail from "./src/screens/editAndDetail";
 
