@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Gifty from "../../components/gifty.js";
 import { checkOcr } from "./ocr/checkOcr.js";
-
+import { AntDesign } from '@expo/vector-icons';
 
 export default function Main({ navigation }) {
   const [gifticonImg, setGifticonImg] = useState("");
@@ -33,9 +33,9 @@ export default function Main({ navigation }) {
   }, []);
 
   // gifticons 상태가 변경될 때마다 호출됩니다.
-  useEffect(() => {
-    console.log("gifticons(저장된 기프티콘):", gifticons);
-  }, [gifticons]);
+  // useEffect(() => {
+  //   console.log("gifticons(저장된 기프티콘):", gifticons);
+  // }, [gifticons]);
 
   // 이미지 선택
   const pickImage = async () => {
@@ -62,7 +62,11 @@ export default function Main({ navigation }) {
       <View style={styles.container2}>
         <View style={styles.ss}>
           <Text style={styles.appName}>기프트잇</Text>
-          <Text style={styles.setting}>icon</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
+          <AntDesign name="setting" size={40} color="black" 
+          style={styles.setting}
+          />
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.container}>
@@ -105,7 +109,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
   },
   appName: {
-    fontSize: 30,
+    fontSize: 38,
     color: "white",
   },
   ss: {
