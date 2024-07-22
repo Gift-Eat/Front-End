@@ -49,7 +49,7 @@ const GifticonManager = () => {
 
   return (
     <View>
-      <Text>기프티콘 관리 중...</Text>
+      <Text>기프티콘 관리 중</Text>
     </View>
   );
 };
