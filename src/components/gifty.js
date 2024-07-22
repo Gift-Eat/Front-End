@@ -1,13 +1,29 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-const Gifty = ({ image, gifticon_name, store, serial_code,where_to_use,expiration_date,dayLeft, onPress }) => {
+const Gifty = ({
+  gifticon_id,
+  expiration_date,
+  gifticon_name,
+  where_to_use,
+  serial_code,
+  original_image_path,
+  onPress,
+}) => {
+  console.log("원본 이미지 경로:", original_image_path);
+
+  // original_image_path가 존재하지 않으면 기본 이미지 rul 사용
+  const imgUrl = original_image_path
+    ? `http://52.78.201.166:8080/images/${original_image_path.split("/").pop()}`
+    : "https://via.placeholder.com/150";
+  console.log("경로", imgUrl);
+
   return (
     <TouchableOpacity onPress={onPress} style={styles.card}>
-      <Image source={image} style={styles.image} />
-      <Text style={styles.store}>{gifticon_name}</Text>
-      <Text style={styles.name}>{store}</Text>
-      <Text style={styles.expiry}>D-{dd}</Text>
+      <Image source={{ uri: imgUrl }} style={styles.image} />
+      <Text style={styles.store}>{where_to_use}</Text>
+      <Text style={styles.name}>{gifticon_name}</Text>
+      <Text style={styles.expiry}>D-{expiration_date}</Text>
     </TouchableOpacity>
   );
 };
@@ -16,7 +32,7 @@ const styles = StyleSheet.create({
   card: {
     width: 160,
     padding: 5,
-    backgroundColor: "#fff",  
+    backgroundColor: "#fff",
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 1, height: 2 },

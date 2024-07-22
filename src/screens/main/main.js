@@ -1,66 +1,63 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  TouchableHighlight,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, TouchableHighlight } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
-import Gifty from "../components/gifty.js";
-import axios from 'axios';
+import axios from "axios";
+import Gifty from "../../components/gifty.js";
+import { checkOcr } from "./ocr/checkOcr.js";
+
 
 export default function Main({ navigation }) {
-  const [items, setItems] = useState([]);
+  const [gifticonImg, setGifticonImg] = useState("");
+  const [store, setStore] = useState("");
+  const [name, setName] = useState("");
+  const [code, setCode] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [gifticons, setGifticons] = useState([]);
+
+  // 서버에서 데이터 가져오기
+  const getInfo = async () => {
+    try {
+      const response = await axios.get("http://52.78.201.166:8080/api/be/list");
+      const info = response.data;
+      console.log(info);
+
+      setGifticons(info);
+    } catch (error) {
+      console.error("데이터 가져오기 실패:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 첫 번째 단계: 데이터 개수 가져오기
-        const countResponse = await axios.get('http://172.16.108.130:8080/api/be/datacount');
-        const dataCount = countResponse.data.count;
-
-        // 두 번째 단계: 데이터를 가져오기
-        const dataResponse = await axios.get('http://172.16.108.130:8080/api/be/createpro', {
-          params: {
-            count: dataCount
-          }
-        });
-
-        setItems(dataResponse.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+    getInfo();
   }, []);
 
+  // gifticons 상태가 변경될 때마다 호출됩니다.
+  useEffect(() => {
+    console.log("gifticons(저장된 기프티콘):", gifticons);
+  }, [gifticons]);
+
+  // 이미지 선택
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
       quality: 1,
     });
+    // console.log("Image Picker 결과: ", result);
 
     if (result.assets && result.assets.length > 0 && !result.canceled) {
       const imageUri = result.assets[0].uri;
-      navigation.navigate("Regist", { image: imageUri });
+      // console.log("선택된 이미지 uri: ", imageUri);
+      const giftyconInfo = await checkOcr(imageUri)
+      navigation.navigate("Regist", { image: imageUri, giftyconInfo:giftyconInfo });
     }
   };
 
   return (
     <View style={styles.bigcont}>
-      <TouchableHighlight
-        onPress={pickImage}
-        activeOpacity={0.6}
-        underlayColor="#1c7a33"
-        style={styles.regist}
-      >
-        <Image source={require("../assets/regist.png")} style={{ width: 66, height: 66 }} />
+      <TouchableHighlight onPress={pickImage} activeOpacity={0.6} underlayColor="#1c7a33" style={styles.regist}>
+        <Image source={require("../../assets/regist.png")} style={{ width: 66, height: 66 }} />
       </TouchableHighlight>
       <View style={styles.container2}>
         <View style={styles.ss}>
@@ -71,14 +68,11 @@ export default function Main({ navigation }) {
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.row}>
-            {items.map((gifticon) => (
+            {gifticons.map((gifticon) => (
               <Gifty
-                key={gifticon.id}
-                image={{ uri: gifticon.image }}
-                gifticonName={gifticon.gifticon_name}
-                store={gifticon.store}
-                expiry={gifticon.expiry}
-                onPress={() => navigation.navigate("EditAndDetail", { itemId: gifticon.id })}
+                key={gifticon.gifticon_id}
+                {...gifticon}
+                onPress={() => navigation.navigate("EditAndDetail", { gifticon })}
               />
             ))}
           </View>
@@ -143,4 +137,3 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
 });
-

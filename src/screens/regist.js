@@ -1,15 +1,6 @@
 import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { StyleSheet, Text, View, Image, TextInput, ScrollView, TouchableOpacity, Alert } from "react-native";
 import * as token from "../styles/designToken";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as ImageManipulator from "expo-image-manipulator";
@@ -22,20 +13,27 @@ const imageWidth = screenWidth * 0.8;
 
 export default function Regist({ route }) {
   const { image } = route.params || {};
+  const { giftyconInfo } = route.params || {};
+
+  console.log("gd ",giftyconInfo)
   const [croppedImage, setCroppedImage] = useState(null);
   const [originalImage, setOriginalImage] = useState(image);
-  const [store, setStore] = useState("");
-  const [name, setName] = useState("");
-  const [expiry, setExpiry] = useState("");
+  const [store, setStore] = useState(giftyconInfo.store);
+  const [name, setName] = useState(giftyconInfo.name);
+  const [expiry, setExpiry] = useState(giftyconInfo.expirationDate);
+  const [code, setCode] = useState(giftyconInfo.code);
   // const [id, setId] = useState("");
-  const [code, setCode] = useState("");
+
+  const [registrationTime, setRegistrationTime] = useState("");
+
   const [dayLeft, setDayLeft] = useState(null);
 
   const handleExpiryChange = (text) => {
-    const exText = text.replace(/[^0-9]/g, '');
+    const exText = text.replace(/[^0-9]/g, "");
     setExpiry(exText);
   };
 
+  // 이미지 크롭
   useEffect(() => {
     const cropImage = async () => {
       try {
@@ -60,13 +58,14 @@ export default function Regist({ route }) {
         console.log("Cropped image URI: ", manipResult.uri);
         setCroppedImage(manipResult.uri);
       } catch (error) {
-        console.log("Image cropping failed: ", error);
+        console.log("이미지 자르기 실패: ", error);
       }
     };
 
     cropImage();
   }, [originalImage]);
-  
+
+  // 남은 유효기간 계산
   useEffect(() => {
     const calculateDayLeft = () => {
       if (expiry.length === 8) {
@@ -80,12 +79,15 @@ export default function Regist({ route }) {
         const timeDiff = expiryDate.getTime() - today.getTime();
         const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)); // 일 단위로 변환
         setDayLeft(daysDiff);
-      }  
+      } else {
+        setDayLeft(null); // 유효하지 않은 날짜 형식일 경우
+      }
     };
 
     calculateDayLeft();
   }, [expiry]);
 
+  // 이미지 눌렀을 때
   const handleImagePress = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -102,45 +104,36 @@ export default function Regist({ route }) {
     }
   };
 
+  // 등록 버튼 눌렀을 때
   const handleSubmit = async () => {
-    console.log({dayLeft})
-    if (dayLeft < 0) {
-      Alert.alert("잘못된 형식입니다");
-      return;}
-    if (expiry.length !== 8 ){
-      Alert.alert("생년월일은 8자리를 입력해주세요.")
-      return ;
-    }
+    console.log({ dayLeft });
 
     if (!store || !name || !code || !expiry) {
-      Alert.alert("Error", "모든 칸을 입력해주세요.");
+      Alert.alert("오류", "모든 칸을 입력해주세요.");
       return;
     }
 
     const data = {
-      gifticon_name : name,
-      where_to_use : store,
-      serial_code :  parseInt(code),
-      expiration_date: parseInt(expiry)
-      // day_left: dayLeft,
-      
+      gifticon_name: name,
+      where_to_use: store,
+      serial_code: code,
+      expiration_date: parseInt(expiry), // 문자열 아니고 int
     };
-    console.log('Sending data:', data);
+    console.log("data", data);
+
     try {
-      const response = await axios.post("http://172.16.108.130:8080/api/be/createpro",data);
-      console.log(response.data);
-      
+      const response = await axios.post("http://52.78.201.166:8080/api/be/createpro", data);
+      console.log(response.status);
 
       if (response.status === 200) {
-        Alert.alert("Success", "데이터가 성공적으로 전송되었습니다");
+        Alert.alert("", "기프티콘이 등록되었습니다.");
         console.log("성공");
-        // navigation.navigate('Main');  이거 되는지 안되는지 백이랑 서버 연결해봐야 함
       } else {
-        Alert.alert("Error", "서버에 데이터를 전송하는 데 실패했습니다");
+        Alert.alert("", "오류로 인해 기프티콘이 등록되지 않았습니다.");
         console.log("실패");
       }
     } catch (error) {
-      Alert.alert("Error", "네트워크 요청 중 오류가 발생했습니다");
+      Alert.alert("", "네트워크 오류가 발생했습니다.");
       console.log(error);
     }
   };
@@ -148,6 +141,7 @@ export default function Regist({ route }) {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.page}>기프티콘 등록하기</Text>
+
       <TouchableOpacity onPress={handleImagePress} style={styles.imageContainer}>
         {croppedImage ? (
           <Image source={{ uri: croppedImage }} style={styles.gifticonImage} />
@@ -167,7 +161,7 @@ export default function Regist({ route }) {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.edit}
-          placeholder="기프티콘 코드 (1111222233334444)"
+          placeholder="기프티콘 코드 (ㅇㅇ자리)"
           onChangeText={setCode}
           keyboardType="numeric"
         />
@@ -176,7 +170,7 @@ export default function Regist({ route }) {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.edit}
-          placeholder="유효기간 (20240511)"
+          placeholder="유효기간 (8자리)"
           value={expiry}
           onChangeText={handleExpiryChange}
           keyboardType="numeric"
