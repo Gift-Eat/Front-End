@@ -20,3 +20,9 @@
 // git add .
 // git commit -m "Merge files from main branch to mainpage folder"
 // git push origin mainpage
+
+
+
+// npm install react-native-push-notification   알람보내는 npm
+
+// expo install expo-background-fetch expo-task-manager   앱이 백그라운드에서 주기적으로 실행시켜주는 expo

@@ -30,11 +30,10 @@ const checkAndNotify = async (gifticons) => {
 };
 
 const GifticonManager = () => {
-  useEffect(() => {
-    // 기프티콘 데이터를 서버에서 불러오기
+    useEffect(() => {
     const fetchGifticons = async () => {
       try {
-        const response = await axios.get("http://52.78.201.166:8080/api/be/gifticons"); // 예시 URL
+        const response = await axios.get("http://52.78.201.166:8080/api/be/createpro"); 
         const gifticons = response.data;
         checkAndNotify(gifticons);
       } catch (error) {
@@ -56,3 +55,15 @@ const GifticonManager = () => {
 };
 
 export default GifticonManager;
+
+
+// const checkAndNotify = async (gifticons) => {
+//   const today = new Date();
+
+//   gifticons.forEach((gifticon) => {
+//   const daysLeft = calculateDaysLeft(gifticon.expiration_date);
+//   if (daysLeft === 7) {
+//       scheduleNotification(gifticon.gifticon_name);
+//   }
+// });
+// };
