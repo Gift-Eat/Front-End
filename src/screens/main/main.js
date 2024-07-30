@@ -31,7 +31,7 @@ export default function Main({ navigation }) {
     getInfo();
   }, []);
 
-  // gifticons 상태가 변경될 때마다 호출됩니다.
+  // gifticons 상태가 변경될 때마다 호출
   useEffect(() => {
     console.log("gifticons(저장된 기프티콘):", gifticons);
   }, [gifticons]);
@@ -61,7 +61,9 @@ export default function Main({ navigation }) {
       <View style={styles.container2}>
         <View style={styles.ss}>
           <Text style={styles.appName}>기프트잇</Text>
-          <Text style={styles.setting}>icon</Text>
+          <Text style={styles.setting} onPress={() => navigation.navigate("Login")}>
+            정보
+          </Text>
         </View>
       </View>
       <View style={styles.container}>
