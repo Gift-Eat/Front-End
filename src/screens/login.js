@@ -1,9 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 export default function Login() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>로그인</Text>
@@ -13,9 +16,10 @@ export default function Login() {
         <Text style={styles.inputText}>비밀번호</Text>
         <TextInput style={styles.input} secureTextEntry />
       </View>
-      <TouchableOpacity style={styles.signup} activeOpacity={0.7}>
+      <TouchableOpacity style={styles.signup} activeOpacity={0.7} onPress={() => navigation.navigate("SignUp")}>
         <Text style={styles.signupText}>회원가입</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.loginBtn} activeOpacity={0.8}>
         <Text style={styles.loginBtnText}>로그인</Text>
       </TouchableOpacity>
@@ -43,6 +47,7 @@ const styles = StyleSheet.create({
   inputText: {
     fontSize: 16,
     marginBottom: 6,
+    color: "#333333",
   },
   input: {
     height: 56,
