@@ -14,6 +14,7 @@ export default function Main({ navigation }) {
   const [code, setCode] = useState("");
   const [expiry, setExpiry] = useState("");
   const [gifticons, setGifticons] = useState([]);
+  const [showDelete, setShowDelete] = useState(null);
 
   // 서버에서 데이터 가져오기
   const getInfo = async () => {
@@ -60,9 +61,15 @@ export default function Main({ navigation }) {
   };
 
   // 저장된 기프티콘 삭제
-  const deleteGifticon = (gifticon_id) => {
-    setGifticons(gifticons.filter((gifticon) => gifticon.gifticon_id !== gifticon_id));
-    setShowDelete(null);
+  const deleteGifticon = async (gifticon_id) => {
+    try {
+      await axios.get(`http://52.78.201.166:8080/api/be/delete/${gifticon_id}`);
+      setGifticons(gifticons.filter((gifticon) => gifticon.gifticon_id !== gifticon_id));
+      setShowDelete(null);
+    } catch (error) {
+      console.error("기프티콘 삭제 실패:", error);
+      Alert.alert("삭제 실패", "기프티콘 삭제 중 오류가 발생했습니다.");
+    }
   };
 
   return (
