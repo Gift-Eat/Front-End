@@ -13,13 +13,17 @@ const imageWidth = screenWidth * 0.8;
 
 export default function Regist({ route }) {
   const { image } = route.params || {};
+  const { giftyconInfo } = route.params || {};
+
+  console.log("gd ",giftyconInfo)
   const [croppedImage, setCroppedImage] = useState(null);
   const [originalImage, setOriginalImage] = useState(image);
-  const [store, setStore] = useState("");
-  const [name, setName] = useState("");
-  const [expiry, setExpiry] = useState("");
+  const [store, setStore] = useState(giftyconInfo.store);
+  const [name, setName] = useState(giftyconInfo.name);
+  const [expiry, setExpiry] = useState(giftyconInfo.expirationDate);
+  const [code, setCode] = useState(giftyconInfo.code);
   // const [id, setId] = useState("");
-  const [code, setCode] = useState("");
+
   const [registrationTime, setRegistrationTime] = useState("");
 
   const [dayLeft, setDayLeft] = useState(null);
@@ -29,6 +33,7 @@ export default function Regist({ route }) {
     setExpiry(exText);
   };
 
+  // 이미지 크롭
   useEffect(() => {
     const cropImage = async () => {
       try {
@@ -60,6 +65,7 @@ export default function Regist({ route }) {
     cropImage();
   }, [originalImage]);
 
+  // 남은 유효기간 계산
   useEffect(() => {
     const calculateDayLeft = () => {
       if (expiry.length === 8) {
@@ -81,6 +87,7 @@ export default function Regist({ route }) {
     calculateDayLeft();
   }, [expiry]);
 
+  // 이미지 눌렀을 때
   const handleImagePress = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -97,6 +104,7 @@ export default function Regist({ route }) {
     }
   };
 
+  // 등록 버튼 눌렀을 때
   const handleSubmit = async () => {
     console.log({ dayLeft });
 
@@ -109,7 +117,7 @@ export default function Regist({ route }) {
       gifticon_name: name,
       where_to_use: store,
       serial_code: code,
-      expiration_date: parseInt(expiry),
+      expiration_date: parseInt(expiry), // 문자열 아니고 int
     };
     console.log("data", data);
 
@@ -118,14 +126,14 @@ export default function Regist({ route }) {
       console.log(response.status);
 
       if (response.status === 200) {
-        Alert.alert("Success", "데이터가 성공적으로 전송되었습니다");
+        Alert.alert("", "기프티콘이 등록되었습니다.");
         console.log("성공");
       } else {
-        Alert.alert("Error", "서버에 데이터를 전송하는 데 실패했습니다");
+        Alert.alert("", "오류로 인해 기프티콘이 등록되지 않았습니다.");
         console.log("실패");
       }
     } catch (error) {
-      Alert.alert("Error", "네트워크 요청 중 오류가 발생했습니다");
+      Alert.alert("", "네트워크 오류가 발생했습니다.");
       console.log(error);
     }
   };

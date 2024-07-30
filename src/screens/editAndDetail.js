@@ -1,33 +1,27 @@
 import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, View, Image, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import * as token from "../styles/designToken";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-export default function EditAndDetail() {
+export default function EditAndDetail({ route }) {
+  const { gifticon } = route.params;
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.page}>기프티콘 수정하기</Text>
-      <Image style={styles.gifticon} source={require("../assets/gift.png")} />
+      <Image style={styles.gifticon} source={{ uri: gifticon.original_image_path }} />
 
       <View style={styles.inputContainer}>
-        <TextInput style={styles.edit} placeholder="사용처" value="미스터피자" />
+        <TextInput style={styles.edit} placeholder="사용처" value={gifticon.where_to_use} />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.edit} placeholder="상품명" value="미스터트리오L" />
+        <TextInput style={styles.edit} placeholder="상품명" value={gifticon.gifticon_name} />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.edit} placeholder="기프티콘 코드" value="921125315632" />
+        <TextInput style={styles.edit} placeholder="기프티콘 코드" value={gifticon.serial_code} />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
 
