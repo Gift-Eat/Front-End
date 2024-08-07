@@ -1,69 +1,47 @@
-import React, { useEffect } from "react";
-import { View, Text } from "react-native";
-import PushNotification from "react-native-push-notification";
-import axios from "axios"; // 예시로 사용
+import * as TaskManager from 'expo-task-manager';
+import * as BackgroundFetch from 'expo-background-fetch';
+import PushNotification from 'react-native-push-notification';
 
-PushNotification.configure({
-    onNotification: function (notification) {
-      console.log("NOTIFICATION:", notification);
-    },
-    requestPermissions: true,
-  });
-  
-const scheduleNotification = (gifticon_name) => {
-    PushNotification.localNotification({
-    title: "기프티콘 알림",
-    message: `기프티콘 "${gifticon_name}"이(가) 7일 남았습니다!`,
-    channelId: "default-channel-id",
-    });
-};
+// Define the task
+TaskManager.defineTask('BACKGROUND_FETCH_TASK', async () => {
+  try {
+    // Fetch gifticons and check for expiration
+    const response = await fetch('http://52.78.201.166:8080/api/be/gifticons');
+    const gifticons = await response.json();
 
-const checkAndNotify = async (gifticons) => {
-    const today = new Date();
-
-    gifticons.forEach((gifticon) => {
-    const daysLeft = calculateDaysLeft(gifticon.expiration_date);
-    if (daysLeft === 7) {
-        scheduleNotification(gifticon.gifticon_name);
-    }
-  });
-};
-
-const GifticonManager = () => {
-    useEffect(() => {
-    const fetchGifticons = async () => {
-      try {
-        const response = await axios.get("http://52.78.201.166:8080/api/be/createpro"); 
-        const gifticons = response.data;
-        checkAndNotify(gifticons);
-      } catch (error) {
-        console.error("Error fetching gifticons:", error);
+    gifticons.forEach(gifticon => {
+      const daysLeft = calculateDaysLeft(gifticon.expiration_date);
+      if (daysLeft === 7) {
+        scheduleNotification(gifticon.gifticon_name, 7);
+      } else if (daysLeft === 30) {
+        scheduleNotification(gifticon.gifticon_name, 30);
       }
-    };
+    });
 
-    fetchGifticons();
-    const interval = setInterval(fetchGifticons, 24 * 60 * 60 * 1000); // 매일 24시간마다 확인
+    return BackgroundFetch.Result.NewData;
+  } catch (error) {
+    console.error('Error in background fetch:', error);
+    return BackgroundFetch.Result.Failed;
+  }
+});
 
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <View>
-      <Text>기프티콘 관리 중</Text>
-    </View>
-  );
+const calculateDaysLeft = (expiryDate) => {
+  const today = new Date();
+  const expiry = new Date(expiryDate);
+  const timeDiff = expiry.getTime() - today.getTime();
+  const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  return daysDiff;
 };
 
-export default GifticonManager;
+const scheduleNotification = (gifticon_name, daysLeft) => {
+  const message =
+    daysLeft === 7
+      ? `기프티콘 "${gifticon_name}"이(가) 7일 남았습니다`
+      : `기프티콘 "${gifticon_name}"이(가) 30일 남았습니다`;
 
-
-// const checkAndNotify = async (gifticons) => {
-//   const today = new Date();
-
-//   gifticons.forEach((gifticon) => {
-//   const daysLeft = calculateDaysLeft(gifticon.expiration_date);
-//   if (daysLeft === 7) {
-//       scheduleNotification(gifticon.gifticon_name);
-//   }
-// });
-// };
+  PushNotification.localNotification({
+    title: "기프티콘 알림",
+    message,
+    channelId: "default-channel-id",
+  });
+};

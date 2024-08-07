@@ -118,6 +118,7 @@ export default function Regist({ route }) {
       where_to_use: store,
       serial_code: code,
       expiration_date: parseInt(expiry), // 문자열 아니고 int
+      dayLeft: dayLeft,
     };
     console.log("data", data);
 

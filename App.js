@@ -7,9 +7,26 @@ import Main from "./src/screens/main/main";
 import Regist from "./src/screens/regist";
 import EditAndDetail from "./src/screens/editAndDetail";
 import Setting from "./src/screens/setting";
+import { Alert } from 'react-native';
+import * as BackgroundFetch from 'expo-background-fetch';
+import * as TaskManager from 'expo-task-manager';
+import './TaskManager'; // Import the TaskManager
+
 const Stack = createStackNavigator();
 
 export default function App() {
+  useEffect(() => {
+    const init = async () => {
+      await BackgroundFetch.registerTaskAsync('BACKGROUND_FETCH_TASK', {
+        minimumInterval: 60 * 60 * 24, // 24 hours
+        stopOnTerminate: false,
+        startOnBoot: true,
+      });
+    };
+
+    init();
+  }, []);
+  
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main">
