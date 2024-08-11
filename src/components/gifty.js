@@ -2,8 +2,6 @@ import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
 
-
-
 const Gifty = ({
   gifticon_id,
   expiration_date,
@@ -16,8 +14,6 @@ const Gifty = ({
 
 }) => {
   console.log("원본 이미지 경로:", original_image_path);
-
-
 
   // original_image_path가 존재하지 않으면 기본 이미지 rul 사용
   const imgUrl = original_image_path
