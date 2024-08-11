@@ -71,9 +71,11 @@ export default function Main({ navigation }) {
           style={styles.setting}
           />
           </TouchableOpacity>
-          <Text style={styles.setting} onPress={() => navigation.navigate("Login")}>
+          <View>
+          <Text style={styles.inform} onPress={() => navigation.navigate("Login")}>
             정보
           </Text>
+          </View>
         </View>
       </View>
       <View style={styles.container}>
@@ -124,7 +126,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   setting: {
-    marginRight: 20,
+    
+  },
+  inform: {
+    marginTop: 10,
+    marginRight: 30,
+    marginLeft: -60,
+    fontSize:20,
+
   },
   row: {
     flexDirection: "row",

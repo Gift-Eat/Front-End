@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, TextInput } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, TextInput, TouchableWithoutFeedback, Keyboard} from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -7,6 +7,7 @@ export default function SignUp() {
   const [focused, setFocused] = useState(null);
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
       <Text style={styles.title}>회원가입</Text>
       <View style={styles.inputContainer}>
@@ -36,6 +37,7 @@ export default function SignUp() {
       </View>
       <StatusBar style="auto" />
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 
