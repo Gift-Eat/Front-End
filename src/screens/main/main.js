@@ -15,7 +15,7 @@ export default function Main({ navigation }) {
   const [expiry, setExpiry] = useState("");
   const [gifticons, setGifticons] = useState([]);
   const [showDelete, setShowDelete] = useState(null);
-
+  //
   // 서버에서 데이터 가져오기
   const getInfo = async () => {
     try {
