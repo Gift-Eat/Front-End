@@ -114,6 +114,9 @@ export default function Regist({ route }) {
     }
 
     const data = {
+      // original_image_path: image,
+      // original_image_path: originalImage,
+      original_image_path: croppedImage,
       gifticon_name: name,
       where_to_use: store,
       serial_code: code,
@@ -129,7 +132,7 @@ export default function Regist({ route }) {
         Alert.alert("", "기프티콘이 등록되었습니다.");
         console.log("성공");
       } else {
-        Alert.alert("", "오류로 인해 기프티콘이 등록되지 않았습니다.");
+        Alert.alert("", "기프티콘 등록에 실패했습니다.");
         console.log("실패");
       }
     } catch (error) {
@@ -159,18 +162,13 @@ export default function Regist({ route }) {
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.edit}
-          placeholder="기프티콘 코드 (ㅇㅇ자리)"
-          onChangeText={setCode}
-          keyboardType="numeric"
-        />
+        <TextInput style={styles.edit} placeholder="기프티콘 코드" onChangeText={setCode} keyboardType="numeric" />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.edit}
-          placeholder="유효기간 (8자리)"
+          placeholder="유효기간(8자리)"
           value={expiry}
           onChangeText={handleExpiryChange}
           keyboardType="numeric"
