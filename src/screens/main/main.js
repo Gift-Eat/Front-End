@@ -15,7 +15,7 @@ export default function Main({ navigation }) {
   const [expiry, setExpiry] = useState("");
   const [gifticons, setGifticons] = useState([]);
   const [showDelete, setShowDelete] = useState(null);
-  //
+
   // 서버에서 데이터 가져오기
   const getInfo = async () => {
     try {
@@ -55,9 +55,9 @@ export default function Main({ navigation }) {
     }
   };
 
-  // 꾹 눌렀을 때
-  const handleLongPress = (gifticon_id) => {
-    setShowDelete(gifticon_id); // 삭제 버튼 보이기
+  // 저장된 기프티콘 꾹 눌렀을 때
+  const handleLongPress = (gifticonId) => {
+    setShowDelete(gifticonId); // 삭제 버튼 보이기
   };
 
   // 저장된 기프티콘 삭제
