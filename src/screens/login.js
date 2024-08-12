@@ -16,9 +16,18 @@ export default function Login() {
         <Text style={styles.inputText}>비밀번호</Text>
         <TextInput style={styles.input} secureTextEntry />
       </View>
-      <TouchableOpacity style={styles.signup} activeOpacity={0.7} onPress={() => navigation.navigate("SignUp")}>
-        <Text style={styles.signupText}>회원가입</Text>
-      </TouchableOpacity>
+      <View style={styles.otherContainer}>
+        <TouchableOpacity style={styles.signup} activeOpacity={1} onPress={() => navigation.navigate("SignUp")}>
+          <Text style={styles.signupText}>회원가입</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.signup}
+          activeOpacity={1}
+          onPress={() => navigation.navigate("PasswordChanging")}
+        >
+          <Text style={styles.signupText}>비밀번호 변경</Text>
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity style={styles.loginBtn} activeOpacity={0.8}>
         <Text style={styles.loginBtnText}>로그인</Text>
@@ -58,11 +67,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontSize: 16,
   },
+  otherContainer: {
+    flexDirection: "row",
+  },
   signup: {
-    marginTop: 12,
+    // marginTop: 12,
+    alignItems: "center",
+    justifyContent: "center", // 회원가입과 비밀번호 변경 높이 맞게
   },
   signupText: {
-    color: "#28A745",
+    color: "#333333",
+    padding: 10,
   },
   loginBtn: {
     width: "90%",
