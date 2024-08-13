@@ -6,6 +6,8 @@ import { LongPressGestureHandler, State } from "react-native-gesture-handler";
 import axios from "axios";
 import Gifty from "../../components/gifty.js";
 import { checkOcr } from "./ocr/checkOcr.js";
+import { AntDesign } from '@expo/vector-icons';
+
 
 export default function Main({ navigation }) {
   const [gifticonImg, setGifticonImg] = useState("");
@@ -33,6 +35,7 @@ export default function Main({ navigation }) {
     getInfo();
   }, []);
 
+
   // gifticons 상태가 변경될 때마다 호출
   useEffect(() => {
     console.log("gifticons(저장된 기프티콘):", gifticons);
@@ -50,6 +53,7 @@ export default function Main({ navigation }) {
     if (result.assets && result.assets.length > 0 && !result.canceled) {
       const imageUri = result.assets[0].uri;
       // console.log("선택된 이미지 uri: ", imageUri);
+
       const giftyconInfo = await checkOcr(imageUri);
       navigation.navigate("Regist", { image: imageUri, giftyconInfo: giftyconInfo });
     }
@@ -88,9 +92,17 @@ export default function Main({ navigation }) {
       <View style={styles.container2}>
         <View style={styles.ss}>
           <Text style={styles.appName}>기프트잇</Text>
-          <Text style={styles.setting} onPress={() => navigation.navigate("Login")}>
+
+          <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
+          <AntDesign name="setting" size={40} color="black" 
+          style={styles.setting}
+          />
+          </TouchableOpacity>
+          <View>
+          <Text style={styles.inform} onPress={() => navigation.navigate("Login")}>
             정보
           </Text>
+          </View>
         </View>
       </View>
       <View style={styles.container}>
@@ -159,7 +171,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
   },
   appName: {
-    fontSize: 30,
+    fontSize: 38,
     color: "white",
   },
   ss: {
@@ -167,7 +179,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   setting: {
-    marginRight: 20,
+    
+  },
+  inform: {
+    marginTop: 10,
+    marginRight: 30,
+    marginLeft: -60,
+    fontSize:20,
+
   },
   row: {
     flexDirection: "row",

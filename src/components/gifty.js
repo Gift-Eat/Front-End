@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
+
 const Gifty = ({
   gifticon_id,
   expiration_date,
@@ -9,6 +10,8 @@ const Gifty = ({
   serial_code,
   original_image_path,
   onPress,
+  dayLeft,
+
 }) => {
   // console.log("원본 이미지 경로:", original_image_path);
 
@@ -23,7 +26,7 @@ const Gifty = ({
       <Image source={{ uri: imgUrl }} style={styles.image} />
       <Text style={styles.store}>{where_to_use}</Text>
       <Text style={styles.name}>{gifticon_name}</Text>
-      <Text style={styles.expiry}>D-{expiration_date}</Text>
+      <Text style={styles.expiry}>D-{dayLeft}</Text>
     </TouchableOpacity>
   );
 };
