@@ -93,14 +93,19 @@ export default function Main({ navigation }) {
         <View style={styles.ss}>
           <Text style={styles.appName}>기프트잇</Text>
 
-          <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
           <AntDesign name="setting" size={40} color="black" 
           style={styles.setting}
           />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <Image source={require('../../assets/gg_profile.png')} 
+            style={{width : 42, 
+                    height : 42, 
+                    marginRight : 8}}
+        />
           <View>
           <Text style={styles.inform} onPress={() => navigation.navigate("Login")}>
-            정보
+            로그인
           </Text>
           </View>
         </View>
