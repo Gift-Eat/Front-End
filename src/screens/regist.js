@@ -24,7 +24,6 @@ export default function Regist({ route }) {
   const [code, setCode] = useState(giftyconInfo.code);
   // const [id, setId] = useState("");
 
-  const [registrationTime, setRegistrationTime] = useState("");
 
   const [dayLeft, setDayLeft] = useState(null);
 
