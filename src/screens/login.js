@@ -1,5 +1,16 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, TextInput,TouchableWithoutFeedback, Keyboard } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Alert,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -7,34 +18,60 @@ import axios from "axios";
 export default function Login() {
   const navigation = useNavigation();
 
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
+
+  const Login = async () => {
+    try {
+      console.log(userId, password);
+      const response = await axios.post("http://52.78.201.166:8080/session-login/loginpro", {
+        userId: userId,
+        userPassword: password,
+      });
+
+      // Alert.alert("로그인에 성공했습니다.");
+      console.log("로그인 성공");
+      navigation.navigate("Main"); // 로그인 성공 후 메인 페이지로 이동
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("로그인에 실패했습니다." + error.message);
+      console.log(error.message);
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log(userId);
+  //   console.log(password);
+  // }, [userId, password]);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={styles.container}>
-      <Text style={styles.title}>로그인</Text>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputText}>아이디</Text>
-        <TextInput style={styles.input} />
-        <Text style={styles.inputText}>비밀번호</Text>
-        <TextInput style={styles.input} secureTextEntry />
-      </View>
-      <View style={styles.otherContainer}>
-        <TouchableOpacity style={styles.signup} activeOpacity={1} onPress={() => navigation.navigate("SignUp")}>
-          <Text style={styles.signupText}>회원가입</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.signup}
-          activeOpacity={1}
-          onPress={() => navigation.navigate("PasswordChanging")}
-        >
-          <Text style={styles.signupText}>비밀번호 변경</Text>
-        </TouchableOpacity>
-      </View>
+      <View style={styles.container}>
+        <Text style={styles.title}>로그인</Text>
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputText}>아이디</Text>
+          <TextInput style={styles.input} onChangeText={(text) => setUserId(text)} />
+          <Text style={styles.inputText}>비밀번호</Text>
+          <TextInput style={styles.input} onChangeText={(text) => setPassword(text)} secureTextEntry />
+        </View>
+        <View style={styles.otherContainer}>
+          <TouchableOpacity style={styles.signup} activeOpacity={1} onPress={() => navigation.navigate("SignUp")}>
+            <Text style={styles.signupText}>회원가입</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.signup}
+            activeOpacity={1}
+            onPress={() => navigation.navigate("PasswordChanging")}
+          >
+            <Text style={styles.signupText}>비밀번호 변경</Text>
+          </TouchableOpacity>
+        </View>
 
-      <TouchableOpacity style={styles.loginBtn} activeOpacity={0.8}>
-        <Text style={styles.loginBtnText}>로그인</Text>
-      </TouchableOpacity>
-      <StatusBar style="auto" />
-    </View>
+        <TouchableOpacity style={styles.loginBtn} activeOpacity={0.8} onPress={Login}>
+          <Text style={styles.loginBtnText}>로그인</Text>
+        </TouchableOpacity>
+        <StatusBar style="auto" />
+      </View>
     </TouchableWithoutFeedback>
   );
 }
