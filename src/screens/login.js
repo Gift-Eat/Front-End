@@ -29,20 +29,14 @@ export default function Login() {
         userPassword: password,
       });
 
-      // Alert.alert("로그인에 성공했습니다.");
+      Alert.alert("성공", "로그인에 성공했습니다.");
       console.log("로그인 성공");
       navigation.navigate("Main"); // 로그인 성공 후 메인 페이지로 이동
     } catch (error) {
-      console.error("Login Error:", error);
-      alert("로그인에 실패했습니다." + error.message);
-      console.log(error.message);
+      Alert.alert("실패", "로그인에 실패했습니다.");
+      console.log("로그인 실패:", error.message);
     }
   };
-
-  // useEffect(() => {
-  //   console.log(userId);
-  //   console.log(password);
-  // }, [userId, password]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
