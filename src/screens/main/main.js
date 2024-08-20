@@ -1,13 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, TouchableHighlight } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import { LongPressGestureHandler, State } from "react-native-gesture-handler";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Gifty from "../../components/gifty.js";
 import { checkOcr } from "./ocr/checkOcr.js";
 import { AntDesign } from '@expo/vector-icons';
-
 
 export default function Main({ navigation }) {
   const [gifticonImg, setGifticonImg] = useState("");
@@ -17,6 +17,7 @@ export default function Main({ navigation }) {
   const [expiry, setExpiry] = useState("");
   const [gifticons, setGifticons] = useState([]);
   const [showDelete, setShowDelete] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
 
   // 서버에서 데이터 가져오기
   const getInfo = async () => {
@@ -35,11 +36,16 @@ export default function Main({ navigation }) {
     getInfo();
   }, []);
 
-
-  // gifticons 상태가 변경될 때마다 호출
+  // 로그인 상태 확인
   useEffect(() => {
-    console.log("gifticons(저장된 기프티콘):", gifticons);
-  }, [gifticons]);
+    const checkLoginStatus = async () => {
+      const token = await AsyncStorage.getItem("userToken");
+      if (token) {
+        setIsLoggedIn(true);
+      }
+    };
+    checkLoginStatus();
+  }, []);
 
   // 이미지 선택
   const pickImage = async () => {
@@ -48,11 +54,9 @@ export default function Main({ navigation }) {
       allowsEditing: false,
       quality: 1,
     });
-    // console.log("Image Picker 결과: ", result);
 
     if (result.assets && result.assets.length > 0 && !result.canceled) {
       const imageUri = result.assets[0].uri;
-      // console.log("선택된 이미지 uri: ", imageUri);
 
       const giftyconInfo = await checkOcr(imageUri);
       navigation.navigate("Regist", { image: imageUri, giftyconInfo: giftyconInfo });
@@ -93,21 +97,21 @@ export default function Main({ navigation }) {
         <View style={styles.ss}>
           <Text style={styles.appName}>기프트잇</Text>
 
-          {/* <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
-          <AntDesign name="setting" size={40} color="black" 
-          style={styles.setting}
-          />
-          </TouchableOpacity> */}
-          <Image source={require('../../assets/gg_profile.png')} 
-            style={{width : 42, 
-                    height : 42, 
-                    marginRight : 8}}
-        />
-          <View>
-          <Text style={styles.inform} onPress={() => navigation.navigate("Login")}>
-            로그인
-          </Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              if (isLoggedIn) {
+                navigation.navigate("Setting");
+              } else {
+                navigation.navigate("Login");
+              }
+            }}
+          >
+            {isLoggedIn ? (
+              <AntDesign name="setting" size={40} color="black" style={styles.setting} />
+            ) : (
+              <Text style={styles.inform}>로그인</Text>
+            )}
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.container}>
@@ -183,15 +187,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  setting: {
-    
-  },
+  setting: {},
   inform: {
     marginTop: 10,
     marginRight: 30,
     marginLeft: -60,
-    fontSize:20,
-
+    fontSize: 20,
   },
   row: {
     flexDirection: "row",
