@@ -24,7 +24,7 @@ export default function Login() {
   const Login = async () => {
     try {
       console.log(userId, password);
-      const response = await axios.post("http://52.78.201.166:8080/session-login/loginpro", {
+      const response = await axios.post("http://52.78.201.166:8080/jwt-login/login", {
         userId: userId,
         userPassword: password,
       });
