@@ -12,22 +12,46 @@ export default function EditAndDetail({ route, navigation }) {
   const [whereToUse, setWhereToUse] = useState(gifticon.where_to_use); // 사용처
   const [gifticonName, setGifticonName] = useState(gifticon.gifticon_name); // 상품명
   const [serialCode, setSerialCode] = useState(gifticon.serial_code); // 기프티콘 코드
+  const [expiry, setExpiry] = useState(gifticon.expiration_date); // 유효기간
+  const [dayLeft, setDayLeft] = useState(null);
+
+  // 남은 유효기간 계산
+  useEffect(() => {
+    const calculateDayLeft = () => {
+      if (expiry.length === 8) {
+        const today = new Date();
+        const expiryDate = new Date(
+          parseInt(expiry.substring(0, 4)),
+          parseInt(expiry.substring(4, 6)) - 1, // 월은 0부터 시작
+          parseInt(expiry.substring(6, 8))
+        );
+
+        const timeDiff = expiryDate.getTime() - today.getTime();
+        const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)); // 일 단위로 변환
+        setDayLeft(daysDiff);
+      } else {
+        setDayLeft(null);
+      }
+    };
+
+    calculateDayLeft();
+  }, [expiry]);
 
   // 저장된 기프티콘 수정
-  const updateGifticon = async (gifticon_id) => {
+  const updateGifticon = async () => {
     try {
       const response = await axios.put(`http://52.78.201.166:8080/api/update/${gifticon.gifticon_id}`, {
         where_to_use: whereToUse,
         gifticon_name: gifticonName,
         serial_code: serialCode,
+        expiration_date: parseInt(expiry),
+        dayLeft: dayLeft, // 계산된 남은 일수
       });
 
       if (response.status === 200) {
-        // 수정이 완료된 후 서버에서 최신 데이터를 다시 불러오기
         const updatedResponse = await axios.get("http://52.78.201.166:8080/api/be/list");
         const updatedGifticons = updatedResponse.data;
 
-        // 현재 수정된 기프티콘 찾기
         const updatedGifticon = updatedGifticons.find((g) => g.gifticon_id === gifticon.gifticon_id);
 
         if (updatedGifticon) {
@@ -35,8 +59,6 @@ export default function EditAndDetail({ route, navigation }) {
           setWhereToUse(updatedGifticon.where_to_use);
           setGifticonName(updatedGifticon.gifticon_name);
           setSerialCode(updatedGifticon.serial_code);
-
-          // console.log(serialCode);
 
           Alert.alert("수정 완료", "기프티콘 정보가 성공적으로 수정되었습니다.");
 

@@ -35,6 +35,17 @@ export default function Setting({ navigation }) {
 
   return (
     <View style={styles.container}>
+      {/* Greeting Text */}
+      <Text style={styles.greetingText}>류문일님 환영합니다!</Text>
+
+      {/* Profile Edit Button */}
+      <TouchableOpacity 
+        style={styles.editButton} 
+        onPress={() => navigation.navigate('passwordChanging')}
+      >
+        <Text style={styles.editButtonText}>프로필 수정</Text>
+      </TouchableOpacity>
+
       <View style={styles.notificationContainer}>
         <Text style={styles.notificationText}>7일 남았을 때 알림받기</Text>
         <TouchableOpacity onPress={toggleNotification7Days} style={styles.toggleButton}>
@@ -56,6 +67,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     padding: 20,
+  },
+  greetingText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  editButton: {
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#28A745',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    marginBottom: 40,
+  },
+  editButtonText: {
+    color: '#28A745',
+    fontSize: 16,
   },
   notificationContainer: {
     flexDirection: 'row',
