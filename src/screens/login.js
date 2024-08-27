@@ -31,6 +31,7 @@ export default function Login() {
 
       Alert.alert("성공", "로그인에 성공했습니다.");
       console.log("로그인 성공");
+      console.loog();
       navigation.navigate("Main"); // 로그인 성공 후 메인 페이지로 이동
     } catch (error) {
       Alert.alert("실패", "로그인에 실패했습니다.");
