@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 export default function SignUp() {
+  const navigation = useNavigation();
   const [focused, setFocused] = useState(null);
 
   const [userId, setUserId] = useState("");
@@ -31,7 +32,7 @@ export default function SignUp() {
 
     try {
       console.log(userId, password);
-      const response = await axios.post("http://52.78.201.166:8080/session-login/joinpro", {
+      const response = await axios.post("http://52.78.201.166:8080/jwt-login/join", {
         userId: userId,
         userPassword: password,
         passwordCheck: passwordCheck,
@@ -41,9 +42,11 @@ export default function SignUp() {
       Alert.alert("성공", "회원가입에 성공했습니다.");
       console.log("회원가입 성공");
       navigation.navigate("Login"); // 회원가입 성공 후 로그인 페이지로 이동
+      navigation.navigate("Login");
     } catch (error) {
       Alert.alert("실패", "회원가입에 실패했습니다.");
       console.log("회원가입 실패:", error.message);
+      console.log(response.data);
     }
   };
 

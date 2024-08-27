@@ -24,13 +24,14 @@ export default function Login() {
   const Login = async () => {
     try {
       console.log(userId, password);
-      const response = await axios.post("http://52.78.201.166:8080/session-login/loginpro", {
+      const response = await axios.post("http://52.78.201.166:8080/jwt-login/login", {
         userId: userId,
         userPassword: password,
       });
 
       Alert.alert("성공", "로그인에 성공했습니다.");
       console.log("로그인 성공");
+      console.loog();
       navigation.navigate("Main"); // 로그인 성공 후 메인 페이지로 이동
     } catch (error) {
       Alert.alert("실패", "로그인에 실패했습니다.");
