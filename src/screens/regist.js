@@ -15,11 +15,10 @@ export default function Regist({ route }) {
   const { image } = route.params || {};
   const { giftyconInfo } = route.params || {};
 
-  console.log("gd ",giftyconInfo)
   const [croppedImage, setCroppedImage] = useState(null);
   const [originalImage, setOriginalImage] = useState(image);
   const [store, setStore] = useState(giftyconInfo.store);
-  const [name, setName] = useState(giftyconInfo.name);
+  const [name, setName] = useState(giftyconInfo.productName);
   const [expiry, setExpiry] = useState(giftyconInfo.expirationDate);
   const [code, setCode] = useState(giftyconInfo.code);
   // const [id, setId] = useState("");
@@ -37,7 +36,6 @@ export default function Regist({ route }) {
   useEffect(() => {
     const cropImage = async () => {
       try {
-        console.log("Original image URI: ", originalImage);
         if (!originalImage) {
           console.log("No image found");
           return;
@@ -85,6 +83,10 @@ export default function Regist({ route }) {
     };
 
     calculateDayLeft();
+    console.log(store)
+    console.log(name)
+    console.log(expiry)
+    console.log(code)
   }, [expiry]);
 
   // 이미지 눌렀을 때
@@ -162,7 +164,12 @@ export default function Regist({ route }) {
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.edit} placeholder="기프티콘 코드" onChangeText={setCode} keyboardType="numeric" />
+        <TextInput
+          style={styles.edit}
+          value={code}
+          placeholder="기프티콘 코드"
+          onChangeText={setCode}
+          keyboardType="numeric" />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
