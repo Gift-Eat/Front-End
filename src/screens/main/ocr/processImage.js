@@ -1,40 +1,46 @@
 import axios from "axios";
 import { convertToBase64 } from "./convertToBase64";
-import { parseOcrResult } from "./praseOcrResult";
+import { parseOcrResult } from "./praseOcrResult"; // 오타 수정: 'praseOcrResult' -> 'parseOcrResult'
 import { REACT_APP_OPENAI_API_KEY } from "@env";
 
-// Google Cloud Vision API를 호출하는 함수
+const instance = axios.create({
+  baseURL: 'https://api.openai.com/v1/chat/completions', // 엔드포인트 변경
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${REACT_APP_OPENAI_API_KEY}`
+  }
+});
+
+// OpenAI VISION을 호출하는 함수
 export const processImage = async (imgUri) => {
+  const base64Image = await convertToBase64(imgUri);
+  const prompt = `제공된 기프티콘 이미지를 분석하여 다음의 정보를 추출해. 결과는 다음 JSON 형식으로 반환해야만 해.${'\n\n'}store: 기프티콘을 사용할 수 있는 매장 또는 브랜드 이름.productName: 기프티콘으로 받을 수 있는 상품 또는 서비스 이름.code: 기프티콘에 적힌 고유 코드 또는 일련번호.nexpirationDate: 기프티콘의 유효기간, YYYY-MM-DD 형식으로 작성.`
+  const messages = [
+    {
+      "role": "user",
+      "content": [
+        { "type": "text", "text": prompt },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": base64Image,
+          }
+        }
+      ]
+    }
+  ];
+
   try {
-    const base64Image = await convertToBase64(imgUri);
-    console.log("apiKey", REACT_APP_OPENAI_API_KEY)
-    const prompt = `안뇽`;
-    // const prompt = `${base64Image}\n사진에서 사용처, 상품명, 코드, 유효기간을 추출해줘. 형식은 다음과 같아\n[형식]\nresult ={\nstore:\nproductName:\ncode:\nexpirationPeriod:\n}`;
-    console.log(prompt)
-    const response = await axios.post(
-      'https://api.openai.com/v1/completions',
-      {
-        model: "gpt-4o-mini",  // gpt-4o-mini 모델을 사용할 경우 해당 모델 이름으로 변경
-        prompt: prompt,
-        max_tokens: 150,
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${REACT_APP_OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    console.log('gpt 질문 완료')
+    const response = await instance.post('', {
+      model: 'gpt-4o-mini', // 최신 모델로 유지
+      messages: messages, // 메시지 배열 사용
+      max_tokens: 999999999
+    });
+    const jsonPart = response.data.choices[0].message.content.match(/\{[\s\S`]*\}/)[0];
 
-    const ocrResult  = response.data.choices[0].text.trim();
-    console.log('gpt 질문 결과', ocrResult)
-
-    const parsedInfo = parseOcrResult(ocrResult);
-
-    return parsedInfo;
+    return JSON.parse(jsonPart);
   } catch (error) {
-    console.error("Error processing image:", error);
-    throw error;
+    console.error('Error:', error.response ? error.response.data : error.message);
+    return '';
   }
 };
