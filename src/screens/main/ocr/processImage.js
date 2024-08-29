@@ -23,7 +23,7 @@ export const processImage = async (imgUri) => {
         {
           "type": "image_url",
           "image_url": {
-            "url": base64Image,
+            "url": 'https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/916/9204a53cde5c9857ba889300c5d3a625_res.jpeg',
           }
         }
       ]
@@ -34,7 +34,7 @@ export const processImage = async (imgUri) => {
     const response = await instance.post('', {
       model: 'gpt-4o-mini', // 최신 모델로 유지
       messages: messages, // 메시지 배열 사용
-      max_tokens: 999999999
+      max_tokens: 100
     });
     const jsonPart = response.data.choices[0].message.content.match(/\{[\s\S`]*\}/)[0];
 
