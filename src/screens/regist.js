@@ -11,18 +11,21 @@ import axios from "axios";
 const screenWidth = Dimensions.get("window").width; // 화면 너비
 const imageWidth = screenWidth * 0.8;
 
+// const expiry = "20281111";
+
 export default function Regist({ route }) {
   const { image } = route.params || {};
   const { giftyconInfo } = route.params || {};
+  console.log("info:", giftyconInfo);
 
   const [croppedImage, setCroppedImage] = useState(null);
   const [originalImage, setOriginalImage] = useState(image);
   const [store, setStore] = useState(giftyconInfo.store);
   const [name, setName] = useState(giftyconInfo.productName);
-  const [expiry, setExpiry] = useState(giftyconInfo.expirationDate);
+  // const [expiry, setExpiry] = useState(giftyconInfo.expirationDate);
+  const [expiry, setExpiry] = useState(giftyconInfo?.expirationDate || "");
   const [code, setCode] = useState(giftyconInfo.code);
   // const [id, setId] = useState("");
-
 
   const [dayLeft, setDayLeft] = useState(null);
 
@@ -52,7 +55,7 @@ export default function Regist({ route }) {
           [{ crop: { originX: 0, originY: 0, width: width, height: width } }],
           { compress: 1, format: ImageManipulator.SaveFormat.PNG }
         );
-        console.log("Cropped image URI: ", manipResult.uri);
+        // console.log("Cropped image URI: ", manipResult.uri);
         setCroppedImage(manipResult.uri);
       } catch (error) {
         console.log("이미지 자르기 실패: ", error);
@@ -82,10 +85,10 @@ export default function Regist({ route }) {
     };
 
     calculateDayLeft();
-    console.log(store)
-    console.log(name)
-    console.log(expiry)
-    console.log(code)
+    console.log(store);
+    console.log(name);
+    console.log(expiry);
+    console.log(code);
   }, [expiry]);
 
   // 이미지 눌렀을 때
@@ -114,21 +117,26 @@ export default function Regist({ route }) {
       return;
     }
 
-    const data = {
-      // original_image_path: image,
-      // original_image_path: originalImage,
-      original_image_path: croppedImage,
-      gifticon_name: name,
-      where_to_use: store,
-      serial_code: code,
-      expiration_date: parseInt(expiry), // 문자열 아니고 int
-      dayLeft: dayLeft,
+    const formData = new FormData();
+    formData.append("file", {
+      uri: croppedImage, // 이미지의 uri
+      name: "image.png", // 전송할 파일 이름
+      type: "image/png", // 전송할 파일 타입
+    });
+    formData.append("gifticon_name", name);
+    formData.append("where_to_use", store);
+    formData.append("serial_code", code);
+    formData.append("expiration_date", parseInt(expiry));
+    formData.append("dayLeft", dayLeft);
 
-    };
-    console.log("data", data);
+    console.log("파일:", {
+      uri: croppedImage,
+      name: "image.png",
+      type: "image/png",
+    });
 
     try {
-      const response = await axios.post("http://52.78.201.166:8080/api/be/createpro", data);
+      const response = await axios.post("http://52.78.201.166:8080/api/be/createpro", formData);
       console.log(response.status);
 
       if (response.status === 200) {
@@ -170,7 +178,8 @@ export default function Regist({ route }) {
           value={code}
           placeholder="기프티콘 코드"
           onChangeText={setCode}
-          keyboardType="numeric" />
+          keyboardType="numeric"
+        />
         <Icon name="edit" size={24} color="#000" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
